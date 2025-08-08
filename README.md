@@ -31,7 +31,7 @@ The application will be available at `http://localhost:5173`.
 ## 3. Technical Stack
 
 * **UI Framework**: React (Vite)
-* **Routing**: React Router
+* **Routing**: [React Router](https://reactrouter.com/) (`react-router-dom`)
 * **Styling**: Global CSS with brand standards defined as custom properties.
 * **Authentication**: Smartsheet OAuth 2.0
 * **API**: Smartsheet API
@@ -40,12 +40,12 @@ The application will be available at `http://localhost:5173`.
 
 ## 4. Development Roadmap
 
-### Phase 1: Foundation (Current)
+### Phase 1: Foundation (✅ Completed)
 
 * **Objective**: Establish the core application structure.
-* **Key Tasks**: Configure project with Vite, define global styles and directory structure.
+* **Key Tasks**: Configure project with Vite, define global styles and directory structure, and implement client-side routing.
 
-### Phase 2: Authentication & API Integration
+### Phase 2: Authentication & API Integration (Current)
 
 * **Objective**: Connect to Smartsheet services.
 * **Key Tasks**: Implement OAuth 2.0 login flow, build API service layer for data fetching, and manage auth state.
