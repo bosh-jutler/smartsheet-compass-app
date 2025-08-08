@@ -1,68 +1,91 @@
+/*
+ * ==========================================================================
+ * Global Styles for Smartsheet Compass Application
+ * ==========================================================================
+ *
+ * Description:
+ * This file establishes the foundational styles for the entire React
+ * application. It adheres to the official Smartsheet brand guidelines,
+ * setting up CSS custom properties for the color palette, defining
+ * global typography, and applying base styles to the body.
+ *
+ * Sections:
+ * 1. Root Variables: Defines the core Smartsheet color palette.
+ * 2. Global Resets: Basic resets for consistent box-sizing.
+ * 3. Body & Typography: Sets the default font, color, and background.
+ *
+ * ==========================================================================
+ */
+
+/*
+ * --------------------------------------------------------------------------
+ * 1. Root Variables
+ * --------------------------------------------------------------------------
+ * These custom properties represent the primary and secondary colors
+ * from the Smartsheet brand guidelines. Using variables allows for
+ * easy maintenance and consistent theme application.
+ *
+ * Source: Smartsheet Visual Guide, "Color" section (pages 9-10).
+ */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* -- Primary Palette -- */
+  /* The main brand blue, used for primary text, logos, and key UI elements. */
+  --brand-blue-800: #031c59;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* A light, neutral gray used for application backgrounds and surfaces. */
+  --brand-neutral-35: #eef0f6;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  /* -- Secondary Palette -- */
+  /* A brighter blue for accents, links, and interactive elements. */
+  --brand-blue-500: #2d60d7;
+
+  /* Standard white, used for text on dark backgrounds and card surfaces. */
+  --brand-white: #ffffff;
+}
+
+/*
+ * --------------------------------------------------------------------------
+ * 2. Global Resets
+ * --------------------------------------------------------------------------
+ * A simple reset to ensure all elements use the more intuitive
+ * `border-box` sizing model. This prevents padding and borders from
+ * affecting the final computed width and height of elements.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * --------------------------------------------------------------------------
+ * 3. Body & Typography
+ * --------------------------------------------------------------------------
+ * Sets the global default styles for the application. The font-family
+ * is set according to brand guidelines, with standard system fallbacks.
+ * The background and text colors create the standard Smartsheet look.
+ *
+ * Source: Smartsheet Visual Guide, "Typography" & "Color" sections.
+ */
+body {
+  /* Sets the default font family. "TT Norms Pro" is the primary brand font. */
+  font-family: "TT Norms Pro", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+
+  /* Sets the default text color for the entire application. */
+  color: var(--brand-blue-800);
+
+  /* Sets the default background color for the application. */
+  background-color: var(--brand-neutral-35);
+
+  /* Enhances text legibility on various displays. */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  /* Ensures the app takes up at least the full viewport height. */
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  line-height: 1.5;
 }
