@@ -107,3 +107,81 @@ async def oauth_callback(code: str):
         print(f"An error occurred during token exchange: {e}")
         # Redirect to a login failure page if something goes wrong
         return RedirectResponse(url="http://localhost:5173/?error=auth_failed")
+    
+# ==========================================================================
+# New Endpoint: /api/assessments
+# ==========================================================================
+
+# You will need to know the ID of your "Compass Assessments Index" sheet.
+# For a real application, this would come from a database or a more robust
+# configuration system. For now, we'll hardcode it.
+ASSESSMENTS_INDEX_SHEET_ID = "6581841701064580"
+
+@app.get("/api/assessments")
+async def get_assessments(request: Request):
+    """
+    Fetches the list of assessments for the logged-in user from the
+    "Compass Assessments Index" sheet in Smartsheet.
+    """
+    try:
+        # Retrieve the signed access token from the secure cookie
+        signed_token = request.cookies.get("access_token")
+        if not signed_token:
+            return {"error": "Not authenticated"}, 401
+
+        # Un-sign the cookie to get the actual access token
+        access_token = serializer.loads(signed_token)
+
+        # Prepare the authenticated request to the Smartsheet API
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+        }
+
+        # Make the API call to get the specific sheet
+        sheet_url = f"https://api.smartsheet.com/2.0/sheets/{ASSESSMENTS_INDEX_SHEET_ID}"
+        response = requests.get(sheet_url, headers=headers)
+        response.raise_for_status()
+
+        sheet_data = response.json()
+
+        # --- Parse the Sheet Data ---
+        # This logic assumes the following column names in your sheet:
+        # "Assessment Name", "Completion Date", and "Data Sheet ID"
+        
+        # Create a map of column names to their IDs
+        column_map = {col["title"]: col["id"] for col in sheet_data["columns"]}
+        
+        # Get the IDs for the columns we need
+        name_col_id = column_map.get("Assessment Name")
+        date_col_id = column_map.get("Completion Date")
+        sheet_id_col_id = column_map.get("Data Sheet ID")
+
+        if not all([name_col_id, date_col_id, sheet_id_col_id]):
+             return {"error": "Required columns not found in sheet"}, 500
+
+        assessments = []
+        for row in sheet_data["rows"]:
+            # Helper function to get cell value by column ID
+            def get_cell_value(col_id):
+                cell = next((c for c in row["cells"] if c["columnId"] == col_id), None)
+                return cell.get("value") if cell else None
+
+            assessment_name = get_cell_value(name_col_id)
+            completion_date = get_cell_value(date_col_id)
+            data_sheet_id = get_cell_value(sheet_id_col_id)
+
+            if all([assessment_name, completion_date, data_sheet_id]):
+                assessments.append({
+                    "name": assessment_name,
+                    "date": completion_date,
+                    "sheetId": str(data_sheet_id), # Ensure sheetId is a string
+                })
+
+        return assessments
+
+    except Exception as e:
+        print(f"Error fetching assessments: {e}")
+        return {"error": "Failed to fetch assessments"}, 500
+
+
