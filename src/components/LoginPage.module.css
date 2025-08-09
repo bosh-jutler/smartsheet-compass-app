@@ -40,7 +40,7 @@
   font-weight: 600;
   border-radius: 50em;
   cursor: pointer;
-  position: relative; /* This is the positioning context */
+  position: relative;
   isolation: isolate;
 }
 
@@ -49,7 +49,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 3; /* FIXED: This ensures the content appears above the button's other layers */
+  z-index: 3;
 
   display: flex;
   align-items: center;

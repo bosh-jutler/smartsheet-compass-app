@@ -21,11 +21,6 @@ import styles from './LoginPage.module.css';
 const LoginPage = () => {
   // Handles the click event for the login button.
   const handleLogin = () => {
-    /*
-     * Instead of building the Smartsheet authorization URL on the client-side,
-     * we now redirect to our own backend endpoint ('/api/login').
-     * The Vite proxy will forward this request to our Python server.
-     */
     window.location.href = '/api/login';
   };
 
@@ -34,11 +29,9 @@ const LoginPage = () => {
       {/* Container for the title and logo */}
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>COMPASS</h1>
-        {/* Assumes your logo is named 'smartsheet-logo.svg' and is in the /public folder */}
         <img src="/smartsheet-logo.svg" alt="Smartsheet logo" className={styles.logo} />
       </div>
       <button className={styles.button} onClick={handleLogin}>
-        {/* This container now manages the group layout */}
         <span className={styles.buttonContent}>
           <span className={styles.buttonText}>login</span>
           <span className={styles.arrowContainer}>
