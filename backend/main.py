@@ -184,4 +184,67 @@ async def get_assessments(request: Request):
         print(f"Error fetching assessments: {e}")
         return {"error": "Failed to fetch assessments"}, 500
 
+# ==========================================================================
+# New Endpoint: /api/dashboard/{sheet_id}
+# ==========================================================================
+
+@app.get("/api/dashboard/{sheet_id}")
+async def get_dashboard_data(sheet_id: str, request: Request):
+    """
+    Fetches and parses the data for a specific assessment dashboard sheet.
+    """
+    try:
+        # Retrieve and un-sign the access token from the secure cookie
+        signed_token = request.cookies.get("access_token")
+        if not signed_token:
+            return {"error": "Not authenticated"}, 401
+        access_token = serializer.loads(signed_token)
+
+        # Prepare the authenticated request to the Smartsheet API
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+        }
+
+        # Make the API call to get the specific sheet
+        sheet_url = f"https://api.smartsheet.com/2.0/sheets/{sheet_id}"
+        response = requests.get(sheet_url, headers=headers)
+        response.raise_for_status()
+
+        sheet_data = response.json()
+
+        # --- Parse the Sheet Data ---
+        # This logic assumes the sheet has two columns: 'Metric' and 'Value'.
+        # It will transform the rows into a simple list of objects.
+        
+        column_map = {col["title"]: col["id"] for col in sheet_data["columns"]}
+        metric_col_id = column_map.get("Metric")
+        value_col_id = column_map.get("Value")
+
+        if not metric_col_id or not value_col_id:
+            return {"error": "Dashboard sheet must contain 'Metric' and 'Value' columns."}, 500
+
+        metrics = []
+        for row in sheet_data["rows"]:
+            def get_cell_value(col_id):
+                cell = next((c for c in row["cells"] if c["columnId"] == col_id), None)
+                return cell.get("displayValue") or cell.get("value") if cell else None
+
+            metric_title = get_cell_value(metric_col_id)
+            metric_value = get_cell_value(value_col_id)
+
+            if metric_title and metric_value:
+                metrics.append({"title": metric_title, "value": str(metric_value)})
+        
+        # Return the parsed data along with the sheet name
+        return {
+            "sheetName": sheet_data.get("name"),
+            "metrics": metrics
+        }
+
+    except Exception as e:
+        print(f"Error fetching dashboard data: {e}")
+        return {"error": "Failed to fetch dashboard data"}, 500
+
+
 
