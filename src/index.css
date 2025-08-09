@@ -89,3 +89,35 @@ body {
   min-height: 100vh;
   line-height: 1.5;
 }
+
+/*
+ * --------------------------------------------------------------------------
+ * 4. Component-Specific Styles
+ * --------------------------------------------------------------------------
+ * Styles tailored for specific components, such as the login page background.
+ */
+.login-page-gradient {
+  /* A linear gradient moving from a light, airy blue to a soft purple, matching the "Dawn mid" theme. */
+  background: linear-gradient(90deg, #e0e7ff 0%, #c0d0ff 50%, #a09fff 100%);
+  background-size: 200% 200%;
+  animation: gradient-animation 5s ease infinite;
+}
+
+/*
+ * --------------------------------------------------------------------------
+ * 5. Keyframe Animations
+ * --------------------------------------------------------------------------
+ * Defines the animation for the background gradient, creating a slow,
+ * subtle movement effect by shifting the background position.
+ */
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

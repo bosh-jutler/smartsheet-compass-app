@@ -16,6 +16,7 @@
  */
 
 import React from 'react';
+import styles from './LoginPage.module.css';
 
 const LoginPage = () => {
   // Handles the click event for the login button.
@@ -28,54 +29,14 @@ const LoginPage = () => {
     window.location.href = '/api/login';
   };
 
-  // Styles are derived from the Smartsheet brand guidelines.
-  const styles = {
-    container: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      backgroundColor: 'var(--brand-neutral-35)', // Using brand color from index.css
-    },
-    card: {
-      padding: '48px',
-      backgroundColor: 'var(--brand-white)',
-      borderRadius: '15px', // As per layout guidelines
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-      textAlign: 'center',
-    },
-    title: {
-      color: 'var(--brand-blue-800)',
-      fontSize: '28px',
-      fontWeight: '600', // DemiBold
-      marginBottom: '12px',
-    },
-    subtitle: {
-      color: 'var(--brand-blue-800)',
-      fontSize: '16px',
-      marginBottom: '32px',
-    },
-    button: {
-      backgroundColor: 'var(--brand-blue-500)',
-      color: 'var(--brand-white)',
-      border: 'none',
-      padding: '12px 24px',
-      fontSize: '16px',
-      fontWeight: '600', // DemiBold
-      borderRadius: '8px',
-      cursor: 'pointer',
-      transition: 'background-color 0.3s ease',
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Smartsheet Compass</h1>
-        <p style={styles.subtitle}>
+    <div className={`${styles.container} login-page-gradient`}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>Smartsheet Compass</h1>
+        <p className={styles.subtitle}>
           Please log in to view your PPM assessment dashboard.
         </p>
-        <button style={styles.button} onClick={handleLogin}>
+        <button className={styles.button} onClick={handleLogin}>
           Login with Smartsheet
         </button>
       </div>
