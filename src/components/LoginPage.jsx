@@ -44,14 +44,14 @@ const LoginPage = () => {
           <span className={styles.arrowContainer}>
             <svg
               className={styles.arrow}
-              width="40"
+              width="30"
               height="40"
-              viewBox="0 0 40 40"
+              viewBox="0 0 30 40"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M10 20H38M34 16L38 20L34 24"
+                d="M10 20H28M24 16L28 20L24 24"
                 stroke="white"
                 strokeWidth="2"
                 strokeLinecap="round"
