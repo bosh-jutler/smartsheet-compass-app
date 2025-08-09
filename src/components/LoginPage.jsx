@@ -31,15 +31,36 @@ const LoginPage = () => {
 
   return (
     <div className={`${styles.container} login-page-gradient`}>
-      <div className={styles.card}>
-        <h1 className={styles.title}>Smartsheet Compass</h1>
-        <p className={styles.subtitle}>
-          Please log in to view your PPM assessment dashboard.
-        </p>
-        <button className={styles.button} onClick={handleLogin}>
-          Login with Smartsheet
-        </button>
+      {/* Container for the title and logo */}
+      <div className={styles.titleContainer}>
+        <h1 className={styles.title}>COMPASS</h1>
+        {/* Assumes your logo is named 'smartsheet-logo.svg' and is in the /public folder */}
+        <img src="/smartsheet-logo.svg" alt="Smartsheet logo" className={styles.logo} />
       </div>
+      <button className={styles.button} onClick={handleLogin}>
+        {/* This container now manages the group layout */}
+        <span className={styles.buttonContent}>
+          <span className={styles.buttonText}>login</span>
+          <span className={styles.arrowContainer}>
+            <svg
+              className={styles.arrow}
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 20H38M34 16L38 20L34 24"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </span>
+      </button>
     </div>
   );
 };

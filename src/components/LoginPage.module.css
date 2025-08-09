@@ -1,39 +1,121 @@
 .container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   height: 100vh;
+  padding-top: 15vh;
+  box-sizing: border-box;
 }
 
-.card {
-  padding: 48px;
-  background-color: var(--brand-white);
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
+.titleContainer {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin-bottom: 10vh;
 }
 
 .title {
-  color: var(--brand-blue-800);
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 12px;
+  color: var(--brand-white);
+  font-size: 12vw;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  margin: 0;
 }
 
-.subtitle {
-  color: var(--brand-blue-800);
-  font-size: 16px;
-  margin-bottom: 32px;
+.logo {
+  height: 1.0em;
+  width: auto;
+  margin-left: 0.8ch;
 }
 
 .button {
-  background-color: var(--brand-blue-500);
+  background: transparent;
+  font-family: inherit;
   color: var(--brand-white);
   border: none;
-  padding: 12px 24px;
-  font-size: 16px;
+  font-size: clamp(0.9rem, 2.5vw, 1.5rem);
+  padding: 1.1em 3em;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 50em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  position: relative; /* This is the positioning context */
+  isolation: isolate;
+}
+
+.buttonContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3; /* FIXED: This ensures the content appears above the button's other layers */
+
+  display: flex;
+  align-items: center;
+  gap: 0;
+  transition: gap 0.4s ease;
+}
+
+.button:hover .buttonContent {
+  gap: 0.2em;
+}
+
+.buttonText {
+  flex-shrink: 0;
+}
+
+.arrowContainer {
+  width: 0;
+  height: 40px;
+  display: inline-flex;
+  overflow: hidden;
+  transition: width 0.5s cubic-bezier(0.22, 1.3, 0.5, 1);
+}
+
+.button:hover .arrowContainer {
+  width: 40px;
+}
+
+.arrow {
+  flex-shrink: 0;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s linear;
+}
+
+.button:hover .arrow {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--brand-blue-800);
+  border-radius: 50em;
+  z-index: 1; /* Layer 1: Background */
+}
+
+.button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid white;
+  border-radius: 50em;
+  box-sizing: border-box;
+  clip-path: circle(0% at 0% 50%);
+  transition: clip-path 0.4s ease-in-out;
+  z-index: 2; /* Layer 2: Border */
+}
+
+.button:hover::after {
+  clip-path: circle(150% at 0% 50%);
 }
