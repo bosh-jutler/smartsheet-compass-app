@@ -7,11 +7,11 @@ import styles from './AssessmentTable.module.css';
 /**
  * Calculates display properties and a label for the maturity score.
  * @param {number} score - The maturity score (0-100).
- * @returns {object} An object with width, color class, and a text label.
+ * @returns {object} An object with a color class and a text label.
  */
 const getScoreDetails = (score) => {
   if (score === null || score === undefined) {
-    return { width: '0%', colorClass: '', label: '' };
+    return { colorClass: '', label: '' };
   }
   const scoreNum = Number(score);
   let colorClass = 'low';
@@ -26,8 +26,7 @@ const getScoreDetails = (score) => {
   }
 
   return {
-    width: `${scoreNum}%`,
-    colorClass: styles[colorClass], // e.g., styles.low, styles.medium
+    colorClass: styles[colorClass],
     label: label,
   };
 };
@@ -114,12 +113,7 @@ const AssessmentTable = ({ assessments }) => {
               <td className={styles.cellNumeric}>
                 <div className={styles.scoreContainer}>
                   <span className={styles.scoreText}>{assessment.maturityScore ?? 'N/A'}</span>
-                  <div className={styles.scoreBarContainer}>
-                    <div
-                      className={`${styles.scoreBar} ${scoreDetails.colorClass}`}
-                      style={{ width: scoreDetails.width }}
-                    />
-                  </div>
+                  {/* The label is only rendered if a score exists */}
                   {assessment.maturityScore !== null && assessment.maturityScore !== undefined && (
                      <span className={`${styles.scoreLabel} ${scoreDetails.colorClass}`}>
                        {scoreDetails.label}
