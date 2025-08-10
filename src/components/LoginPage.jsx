@@ -29,10 +29,6 @@ const LoginPage = () => {
     window.location.href = '/api/login';
   };
 
-  if (isLoading) {
-    return <LoadingComponent />;
-  }
-
   return (
     <div className={`${styles.container} login-page-gradient`}>
       {/* Container for the title and logo */}

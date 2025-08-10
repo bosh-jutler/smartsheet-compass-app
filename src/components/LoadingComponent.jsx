@@ -59,7 +59,12 @@ const LoadingComponent = () => {
   };
 
   useEffect(() => {
-    playRipple();
+    const initialDelay = 800; // 0.8 seconds
+    const timer = setTimeout(() => {
+      playRipple();
+    }, initialDelay);
+
+    return () => clearTimeout(timer); // Cleanup on unmount
   }, []);
 
   return (
