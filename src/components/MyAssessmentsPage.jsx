@@ -38,7 +38,7 @@ const MyAssessmentsPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.header}>My Assessments</h1>
+      <h1 className={styles.header}>MY ASSESSMENTS</h1>
       {assessments.length > 0 ? (
         <AssessmentTable assessments={assessments} />
       ) : (

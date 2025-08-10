@@ -6,9 +6,11 @@
 
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   background-color: var(--brand-white);
   border-radius: 15px;
+  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
@@ -22,7 +24,8 @@
 .table th {
   font-size: 16px;
   font-weight: 600;
-  color: var(--brand-blue-800);
+  background-color:var(--brand-blue-500);
+  color: var(--brand-white);
 }
 
 .table tbody tr {
