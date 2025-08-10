@@ -21,8 +21,8 @@
 
 .header {
   color: var(--brand-blue-800);
-  font-size: 4rem;
-  font-weight: 900;
+  font-size: 3rem;
+  font-weight: 900; /* Bold but not overly heavy */
   margin: 0;
 }
 
@@ -48,10 +48,17 @@
 .controlsContainer {
   padding: 24px;
   border-bottom: 1px solid #e5e7eb;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto; /* Key change: Use grid layout */
   align-items: center;
-  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.filters {
+  display: flex;
   gap: 16px;
+  align-items: center;
+  flex-wrap: wrap; /* Allows filters to wrap on smaller screens if needed */
 }
 
 .searchInput {
@@ -103,7 +110,7 @@
   font-weight: 500;
   font-family: inherit;
   color: #ffffff;
-  background-color: #2563eb; /* A modern, friendly blue */
+  background-color: var(--brand-blue-800); /* Updated color */
   border: 0;
   border-radius: 8px;
   text-decoration: none;
@@ -111,9 +118,28 @@
   white-space: nowrap;
 }
 
-.newAssessmentButton:hover {
-  background-color: #1d4ed8; /* A slightly darker blue for hover */
+/*
+ * ==========================================================================
+ * Button Hover Animation
+ * ==========================================================================
+ */
+
+@keyframes jumpSpin {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
+  }
 }
+
+.newAssessmentButton:hover svg {
+  animation: jumpSpin 0.5s ease-in-out;
+}
+
 
 /*
  * ==========================================================================

@@ -40,6 +40,7 @@ const AssessmentTable = ({
 
   const getSortDirectionSymbol = (columnId) => {
     if (sortConfig.key !== columnId) return null;
+    // Using a more subtle arrow icon
     return sortConfig.direction === 'ascending' ? ' ▲' : ' ▼';
   };
 
@@ -56,7 +57,7 @@ const AssessmentTable = ({
   const endRow = Math.min(currentPage * rowsPerPage, totalRows);
 
   return (
-    <div className={styles.paginationContainer}>
+    <div className={styles.tableContainer}>
       <table className={styles.table}>
         <thead>
           <tr>

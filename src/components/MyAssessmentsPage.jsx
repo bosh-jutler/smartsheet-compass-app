@@ -133,48 +133,50 @@ const MyAssessmentsPage = () => {
     <div className={styles.container}>
       <div className={styles.pageHeader}>
         <h1 className={styles.header}>MY ASSESSMENTS</h1>
-        <a
-          href="https://app.smartsheet.com/b/form/ffbeac0824eb40b487a18cc80eabb79b"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.newAssessmentButton}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          <span>Start New Assessment</span>
-        </a>
       </div>
       
       <div className={styles.card}>
         <div className={styles.controlsContainer}>
-          <input
-            type="text"
-            placeholder="Search by customer name..."
-            className={styles.searchInput}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <select
-            className={styles.filterSelect}
-            value={selectedIndustry}
-            onChange={(e) => setSelectedIndustry(e.target.value)}
+          <div className={styles.filters}>
+            <input
+              type="text"
+              placeholder="Search by customer name..."
+              className={styles.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <select
+              className={styles.filterSelect}
+              value={selectedIndustry}
+              onChange={(e) => setSelectedIndustry(e.target.value)}
+            >
+              <option value="">All Industries</option>
+              {industryOptions.map(industry => (
+                <option key={industry} value={industry}>{industry}</option>
+              ))}
+            </select>
+            <select
+              className={styles.filterSelect}
+              value={selectedMaturity}
+              onChange={(e) => setSelectedMaturity(e.target.value)}
+            >
+              <option value="">All Maturities</option>
+              {maturityOptions.map(maturity => (
+                <option key={maturity} value={maturity}>{maturity}</option>
+              ))}
+            </select>
+          </div>
+          <a
+            href="https://app.smartsheet.com/b/form/ffbeac0824eb40b487a18cc80eabb79b"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.newAssessmentButton}
           >
-            <option value="">All Industries</option>
-            {industryOptions.map(industry => (
-              <option key={industry} value={industry}>{industry}</option>
-            ))}
-          </select>
-          <select
-            className={styles.filterSelect}
-            value={selectedMaturity}
-            onChange={(e) => setSelectedMaturity(e.target.value)}
-          >
-            <option value="">All Maturities</option>
-            {maturityOptions.map(maturity => (
-              <option key={maturity} value={maturity}>{maturity}</option>
-            ))}
-          </select>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+            </svg>
+            <span>Start New Assessment</span>
+          </a>
         </div>
 
         {assessments.length > 0 ? (
