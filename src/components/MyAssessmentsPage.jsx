@@ -3,7 +3,7 @@ import AssessmentTable from './AssessmentTable';
 import LoadingComponent from './LoadingComponent';
 import styles from './MyAssessmentsPage.module.css';
 
-// 1. Define the helper function here. It now returns a simple class name.
+// Helper function to determine score label and color
 const getScoreDetails = (score) => {
   if (score === null || score === undefined) {
     return { colorClassName: '', label: '' };
@@ -28,15 +28,23 @@ const MyAssessmentsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [user, setUser] = useState({ email: 'user@example.com' });
+
+  // State for filters
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndustry, setSelectedIndustry] = useState('');
-  const [selectedMaturity, setSelectedMaturity] = useState(''); // 2. State for maturity filter
+  const [selectedMaturity, setSelectedMaturity] = useState('');
+
+  // State for sorting (moved from AssessmentTable)
+  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'descending' });
+  
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 5;
 
   useEffect(() => {
-    // ... useEffect hook is unchanged
+    // Fetching data from the API endpoint
     const fetchAssessments = async () => {
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
         const response = await fetch(`/api/assessments`);
         if (!response.ok) {
           throw new Error('Failed to fetch assessments.');
@@ -53,7 +61,7 @@ const MyAssessmentsPage = () => {
     fetchAssessments();
   }, []);
 
-  // Dynamically generate industry options (unchanged)
+  // Generate unique industry options for the filter dropdown
   const industryOptions = useMemo(() => {
     const uniqueIndustries = new Set(
       assessments.map(assessment => assessment.industry).filter(Boolean)
@@ -61,7 +69,7 @@ const MyAssessmentsPage = () => {
     return Array.from(uniqueIndustries).sort();
   }, [assessments]);
 
-  // 3. Dynamically generate maturity options with a defined sort order
+  // Generate unique maturity options with a defined sort order
   const maturityOptions = useMemo(() => {
     const maturityOrder = ['Initial', 'Defined', 'Optimized'];
     const uniqueMaturities = new Set(
@@ -70,16 +78,53 @@ const MyAssessmentsPage = () => {
     return Array.from(uniqueMaturities).sort((a, b) => maturityOrder.indexOf(a) - maturityOrder.indexOf(b));
   }, [assessments]);
 
-  // 4. Update filtering logic to include all three filters
-  const filteredAssessments = useMemo(() => {
-    return assessments.filter(assessment => {
+  // Function to request a sort change (moved from AssessmentTable)
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+    setCurrentPage(1); // Reset to first page on sort
+  };
+
+  // Memoized hook to filter and sort assessments
+  const processedAssessments = useMemo(() => {
+    let filtered = assessments.filter(assessment => {
       const nameMatch = assessment.name.toLowerCase().includes(searchQuery.toLowerCase());
       const industryMatch = !selectedIndustry || assessment.industry === selectedIndustry;
       const maturityLabel = getScoreDetails(assessment.maturityScore).label;
       const maturityMatch = !selectedMaturity || maturityLabel === selectedMaturity;
       return nameMatch && industryMatch && maturityMatch;
     });
-  }, [assessments, searchQuery, selectedIndustry, selectedMaturity]);
+
+    if (sortConfig.key !== null) {
+      filtered.sort((a, b) => {
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
+        if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [assessments, searchQuery, selectedIndustry, selectedMaturity, sortConfig]);
+  
+  // Reset to page 1 if filters change
+  useEffect(() => {
+    if (currentPage !== 1) {
+        setCurrentPage(1);
+    }
+  }, [searchQuery, selectedIndustry, selectedMaturity]);
+
+  // Memoized hook to paginate the processed assessments
+  const paginatedAssessments = useMemo(() => {
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    return processedAssessments.slice(startIndex, startIndex + rowsPerPage);
+  }, [processedAssessments, currentPage, rowsPerPage]);
+
+  const totalPages = Math.ceil(processedAssessments.length / rowsPerPage);
 
   if (isLoading) return <LoadingComponent />;
   if (error) return <div className={styles.empty}>Error: {error}</div>;
@@ -97,7 +142,7 @@ const MyAssessmentsPage = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <select
-          className={styles.filterSelect} // Use generic class
+          className={styles.filterSelect}
           value={selectedIndustry}
           onChange={(e) => setSelectedIndustry(e.target.value)}
         >
@@ -106,9 +151,8 @@ const MyAssessmentsPage = () => {
             <option key={industry} value={industry}>{industry}</option>
           ))}
         </select>
-        {/* 5. Add the new dropdown for Maturity */}
         <select
-          className={styles.filterSelect} // Use generic class
+          className={styles.filterSelect}
           value={selectedMaturity}
           onChange={(e) => setSelectedMaturity(e.target.value)}
         >
@@ -120,9 +164,18 @@ const MyAssessmentsPage = () => {
       </div>
 
       {assessments.length > 0 ? (
-        filteredAssessments.length > 0 ? (
-          // 6. Pass the getScoreDetails function as a prop
-          <AssessmentTable assessments={filteredAssessments} getScoreDetails={getScoreDetails} />
+        processedAssessments.length > 0 ? (
+          <AssessmentTable
+            assessments={paginatedAssessments}
+            getScoreDetails={getScoreDetails}
+            requestSort={requestSort}
+            sortConfig={sortConfig}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+            totalRows={processedAssessments.length}
+            rowsPerPage={rowsPerPage}
+          />
         ) : (
           <div className={styles.empty}>No matching assessments found.</div>
         )
