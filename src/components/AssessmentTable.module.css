@@ -56,7 +56,6 @@
 
 /* --- 1. Cell Alignment --- */
 .cellNumeric {
-  /* CHANGED: Align header text to the left */
   text-align: left;
   font-variant-numeric: tabular-nums;
 }
@@ -65,7 +64,6 @@
 .scoreContainer {
   display: flex;
   align-items: center;
-  /* CHANGED: Justify content to the start (left) */
   justify-content: flex-start;
   gap: 12px;
 }
@@ -90,9 +88,37 @@
   transition: width 0.5s ease-out;
 }
 
-.scoreBar.low { background-color: #E57373; } /* Red */
-.scoreBar.medium { background-color: #FFB74D; } /* Orange */
-.scoreBar.high { background-color: #81C784; } /* Green */
+/* --- Bar Colors --- */
+.low { background-color: #E57373; } /* Red */
+.medium { background-color: #FFB74D; } /* Orange */
+.high { background-color: #81C784; } /* Green */
+
+/* --- UPDATED: Style for the score label (Pill/Tag Design) --- */
+.scoreLabel {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+  min-width: 65px;
+  text-align: center;
+}
+
+/* --- Label Color Variations (matching the bars) --- */
+.scoreLabel.low {
+  color: #c62828; /* Darker Red */
+  background-color: #ffcdd2; /* Lighter Red */
+}
+
+.scoreLabel.medium {
+  color: #ef6c00; /* Darker Orange */
+  background-color: #ffe0b2; /* Lighter Orange */
+}
+
+.scoreLabel.high {
+  color: #2e7d32; /* Darker Green */
+  background-color: #c8e6c9; /* Lighter Green */
+}
 
 
 /*
