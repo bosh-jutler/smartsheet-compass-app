@@ -1,10 +1,9 @@
 /*
  * ==========================================================================
- * AssessmentTable.module.css: Styles for AssessmentTable
+ * AssessmentTable.module.css: Styles for AssessmentTable (Revised)
  * ==========================================================================
  */
 
-/* KEY CHANGE: Make sure overflow is hidden on the table container */
 .table {
   width: 100%;
   border-collapse: separate;
@@ -12,22 +11,28 @@
   background-color: var(--brand-white);
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  /* This is critical for clipping the header's corners and the animation */
-  overflow: hidden;
+  overflow: hidden; /* Critical for rounded corners */
 }
 
-.table th,
+/* --- Table Header --- */
+.table th {
+  padding: 16px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: var(--brand-blue-500);
+  color: var(--brand-white);
+  white-space: nowrap;
+}
+
+/* --- Table Cells & Rows --- */
 .table td {
   padding: 16px 24px;
-  text-align: left;
   border-bottom: 1px solid var(--brand-neutral-35);
-}
-
-.table th {
-  font-size: 16px;
-  font-weight: 600;
-  background-color:var(--brand-blue-500);
-  color: var(--brand-white);
+  color: var(--brand-neutral-100);
+  vertical-align: middle;
 }
 
 .table tbody tr {
@@ -35,32 +40,81 @@
   transition: background-color 0.2s ease-in-out;
 }
 
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 .table tbody tr:hover {
   background-color: var(--brand-light-blue);
 }
 
+/*
+ * ==========================================================================
+ * Cell-Specific & Component Styles
+ * ==========================================================================
+ */
 
-/* --- NEW ANIMATION STYLES --- */
-/* Remove any previous @keyframes or animation classes */
+/* --- 1. Cell Alignment --- */
+.cellNumeric {
+  /* CHANGED: Align header text to the left */
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- 2. Maturity Score Visualizer --- */
+.scoreContainer {
+  display: flex;
+  align-items: center;
+  /* CHANGED: Justify content to the start (left) */
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.scoreText {
+  font-weight: 600;
+  font-size: 16px;
+  min-width: 30px;
+}
+
+.scoreBarContainer {
+  width: 100px;
+  height: 8px;
+  background-color: var(--brand-neutral-35);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.scoreBar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease-out;
+}
+
+.scoreBar.low { background-color: #E57373; } /* Red */
+.scoreBar.medium { background-color: #FFB74D; } /* Orange */
+.scoreBar.high { background-color: #81C784; } /* Green */
+
+
+/*
+ * ==========================================================================
+ * Animations
+ * ==========================================================================
+ */
 
 @keyframes fanIn {
   from {
-    /* Start each row slightly up and completely transparent */
     opacity: 0;
     transform: translateY(-10px);
   }
   to {
-    /* End with the row in its final position and fully visible */
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* This class will be applied to each <tr> in the table body */
 .rowAnimate {
   animation-name: fanIn;
-  animation-duration: 0.4s; /* How long each individual row animation takes */
+  animation-duration: 0.4s;
   animation-timing-function: ease-out;
-  /* This is the magic: It ensures the row starts invisible *before* its animation begins */
   animation-fill-mode: backwards;
 }

@@ -13,7 +13,7 @@ const MyAssessmentsPage = () => {
     const fetchAssessments = async () => {
       try {
         // Simulate a longer loading time to showcase the animation
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1800));
         const response = await fetch(`/api/assessments`);
         if (!response.ok) {
           throw new Error('Failed to fetch assessments.');
