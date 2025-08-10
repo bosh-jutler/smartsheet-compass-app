@@ -36,7 +36,7 @@
 }
 
 .table tbody tr:hover {
-  background-color: var(--brand-neutral-35);
+  background-color: var(--brand-light-blue);
 }
 
 

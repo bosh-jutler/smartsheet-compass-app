@@ -41,6 +41,8 @@
 
   /* Standard white, used for text on dark backgrounds and card surfaces. */
   --brand-white: #ffffff;
+
+  --brand-light-blue: #ebf1ff;
 }
 
 /*

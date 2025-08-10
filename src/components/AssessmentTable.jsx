@@ -51,16 +51,16 @@ const AssessmentTable = ({ assessments }) => {
         {/* The header will appear instantly, providing a nice anchor point */}
         <tr>
           <th onClick={() => requestSort('date')}>
-            Created Date{getSortDirectionSymbol('date')}
+            CREATED{getSortDirectionSymbol('date')}
           </th>
           <th onClick={() => requestSort('name')}>
-            Customer Name{getSortDirectionSymbol('name')}
+            CUSTOMER{getSortDirectionSymbol('name')}
           </th>
           <th onClick={() => requestSort('industry')}>
-            Industry{getSortDirectionSymbol('industry')}
+            INDUSTRY{getSortDirectionSymbol('industry')}
           </th>
           <th onClick={() => requestSort('maturityScore')}>
-            Maturity Score{getSortDirectionSymbol('maturityScore')}
+            MATURITY SCORE{getSortDirectionSymbol('maturityScore')}
           </th>
         </tr>
       </thead>
