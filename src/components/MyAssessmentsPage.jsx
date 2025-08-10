@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import AssessmentTable from './AssessmentTable';
 import LoadingComponent from './LoadingComponent';
 import MetricWidget from './MetricWidget';
+import IndustryChartWidget from './IndustryChartWidget'; // Import the new chart widget
 import styles from './MyAssessmentsPage.module.css';
 
 // Helper function to determine score label and color
@@ -136,14 +137,14 @@ const MyAssessmentsPage = () => {
         <h1 className={styles.header}>MY ASSESSMENTS</h1>
       </div>
 
-      <div style={{
-        width: 'calc(33.33% - 16px)',
-        marginRight: '24px',
-        marginBottom: '24px',
-        display: 'inline-block',
-        verticalAlign: 'top'
-      }}>
-        <MetricWidget />
+      {/* Container for the metric widgets */}
+      <div style={{ display: 'flex', gap: '24px', marginBottom: '24px', alignItems: 'stretch' }}>
+        <div style={{ flex: '1 1 30%' }}>
+          <MetricWidget />
+        </div>
+        <div style={{ flex: '1 1 70%' }}>
+          <IndustryChartWidget />
+        </div>
       </div>
       
       <div className={styles.card}>
