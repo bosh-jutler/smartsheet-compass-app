@@ -34,7 +34,7 @@ const MyAssessmentsPage = () => {
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [selectedMaturity, setSelectedMaturity] = useState('');
 
-  // State for sorting (moved from AssessmentTable)
+  // State for sorting
   const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'descending' });
   
   // State for pagination
@@ -78,7 +78,7 @@ const MyAssessmentsPage = () => {
     return Array.from(uniqueMaturities).sort((a, b) => maturityOrder.indexOf(a) - maturityOrder.indexOf(b));
   }, [assessments]);
 
-  // Function to request a sort change (moved from AssessmentTable)
+  // Function to request a sort change
   const requestSort = (key) => {
     let direction = 'ascending';
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
@@ -131,57 +131,72 @@ const MyAssessmentsPage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.header}>MY ASSESSMENTS</h1>
-      
-      <div className={styles.controlsContainer}>
-        <input
-          type="text"
-          placeholder="Search by customer name..."
-          className={styles.searchInput}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <select
-          className={styles.filterSelect}
-          value={selectedIndustry}
-          onChange={(e) => setSelectedIndustry(e.target.value)}
+      <div className={styles.pageHeader}>
+        <h1 className={styles.header}>MY ASSESSMENTS</h1>
+        <a
+          href="https://app.smartsheet.com/b/form/ffbeac0824eb40b487a18cc80eabb79b"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.newAssessmentButton}
         >
-          <option value="">All Industries</option>
-          {industryOptions.map(industry => (
-            <option key={industry} value={industry}>{industry}</option>
-          ))}
-        </select>
-        <select
-          className={styles.filterSelect}
-          value={selectedMaturity}
-          onChange={(e) => setSelectedMaturity(e.target.value)}
-        >
-          <option value="">All Maturities</option>
-          {maturityOptions.map(maturity => (
-            <option key={maturity} value={maturity}>{maturity}</option>
-          ))}
-        </select>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
+          <span>Start New Assessment</span>
+        </a>
       </div>
-
-      {assessments.length > 0 ? (
-        processedAssessments.length > 0 ? (
-          <AssessmentTable
-            assessments={paginatedAssessments}
-            getScoreDetails={getScoreDetails}
-            requestSort={requestSort}
-            sortConfig={sortConfig}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
-            totalRows={processedAssessments.length}
-            rowsPerPage={rowsPerPage}
+      
+      <div className={styles.card}>
+        <div className={styles.controlsContainer}>
+          <input
+            type="text"
+            placeholder="Search by customer name..."
+            className={styles.searchInput}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <select
+            className={styles.filterSelect}
+            value={selectedIndustry}
+            onChange={(e) => setSelectedIndustry(e.target.value)}
+          >
+            <option value="">All Industries</option>
+            {industryOptions.map(industry => (
+              <option key={industry} value={industry}>{industry}</option>
+            ))}
+          </select>
+          <select
+            className={styles.filterSelect}
+            value={selectedMaturity}
+            onChange={(e) => setSelectedMaturity(e.target.value)}
+          >
+            <option value="">All Maturities</option>
+            {maturityOptions.map(maturity => (
+              <option key={maturity} value={maturity}>{maturity}</option>
+            ))}
+          </select>
+        </div>
+
+        {assessments.length > 0 ? (
+          processedAssessments.length > 0 ? (
+            <AssessmentTable
+              assessments={paginatedAssessments}
+              getScoreDetails={getScoreDetails}
+              requestSort={requestSort}
+              sortConfig={sortConfig}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+              totalRows={processedAssessments.length}
+              rowsPerPage={rowsPerPage}
+            />
+          ) : (
+            <div className={styles.empty}>No matching assessments found.</div>
+          )
         ) : (
-          <div className={styles.empty}>No matching assessments found.</div>
-        )
-      ) : (
-        <div className={styles.empty}>You have not submitted any assessments yet.</div>
-      )}
+          <div className={styles.empty}>You have not submitted any assessments yet.</div>
+        )}
+      </div>
     </div>
   );
 };
