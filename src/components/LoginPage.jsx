@@ -15,14 +15,23 @@
  * ==========================================================================
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './LoginPage.module.css';
+import LoadingComponent from './LoadingComponent';
 
 const LoginPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   // Handles the click event for the login button.
   const handleLogin = () => {
+    setIsLoading(true);
+    // The redirection will happen, but the loading screen will be visible for a moment.
     window.location.href = '/api/login';
   };
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <div className={`${styles.container} login-page-gradient`}>

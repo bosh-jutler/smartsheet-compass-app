@@ -1,0 +1,83 @@
+.loaderWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.loaderContainer {
+    width: 300px;
+    height: 300px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- Ripple Grid Animation --- */
+.rippleGrid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    width: 80%;
+    height: 80%;
+    gap: 5px;
+}
+
+.rippleGrid .cell {
+    width: 100%;
+    height: 100%;
+    background-color: #e4eaf0;
+    border-radius: 4px;
+    opacity: 1;
+    animation: ripple 0.67s ease-in-out forwards;
+}
+
+/* This class is added via JS to trigger the new convergence animation */
+.rippleGrid .cell.converging {
+    animation: converge 0.27s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Keyframes for the initial ripple effect */
+@keyframes ripple {
+    0%, 100% { background-color: #e4eaf0; transform: scale(1); }
+    40% { background-color: #2d60d7; transform: scale(1.2); }
+    80% { background-color: #e4eaf0; transform: scale(1); }
+}
+
+@keyframes converge {
+    to {
+        transform: translate(var(--tx, 0), var(--ty, 0));
+        opacity: 0;
+    }
+}
+
+.placeholderLogo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background-color: #2d60d7;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 24px;
+    position: absolute;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: fadeInLogo 0.33s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+}
+
+@keyframes fadeInLogo {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

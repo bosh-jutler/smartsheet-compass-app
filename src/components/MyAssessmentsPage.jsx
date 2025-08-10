@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AssessmentTable from './AssessmentTable';
+import LoadingComponent from './LoadingComponent';
 import styles from './MyAssessmentsPage.module.css';
 
 const MyAssessmentsPage = () => {
@@ -11,6 +12,8 @@ const MyAssessmentsPage = () => {
   useEffect(() => {
     const fetchAssessments = async () => {
       try {
+        // Simulate a longer loading time to showcase the animation
+        await new Promise(resolve => setTimeout(resolve, 2000));
         const response = await fetch(`/api/assessments`);
         if (!response.ok) {
           throw new Error('Failed to fetch assessments.');
@@ -29,7 +32,7 @@ const MyAssessmentsPage = () => {
   }, []);
 
   if (isLoading) {
-    return <div className={styles.loading}>Loading assessments...</div>;
+    return <LoadingComponent />;
   }
 
   if (error) {
