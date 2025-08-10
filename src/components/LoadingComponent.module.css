@@ -9,11 +9,9 @@
 }
 
 .loaderContainer {
-    width: 300px;
-    height: 300px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    width: 200px;
+    height: 200px;
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,7 +22,7 @@
 /* --- Ripple Grid Animation --- */
 .rippleGrid {
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     width: 80%;
     height: 80%;
     gap: 5px;
@@ -33,7 +31,7 @@
 .rippleGrid .cell {
     width: 100%;
     height: 100%;
-    background-color: #e4eaf0;
+    background-color: #ffffff;
     border-radius: 4px;
     opacity: 1;
     animation: ripple 0.67s ease-in-out forwards;
@@ -46,9 +44,9 @@
 
 /* Keyframes for the initial ripple effect */
 @keyframes ripple {
-    0%, 100% { background-color: #e4eaf0; transform: scale(1); }
-    40% { background-color: #2d60d7; transform: scale(1.2); }
-    80% { background-color: #e4eaf0; transform: scale(1); }
+    0%, 100% { background-color: #ffffff; transform: scale(1); }
+    40% { background-color: #031c59; transform: scale(1.2); }
+    80% { background-color: #ffffff; transform: scale(1); }
 }
 
 @keyframes converge {
@@ -59,16 +57,12 @@
 }
 
 .placeholderLogo {
-    width: 60px;
-    height: 60px;
+    width: 240px;
+    height: 240px;
     border-radius: 12px;
-    background-color: #2d60d7;
-    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
-    font-size: 24px;
     position: absolute;
     opacity: 0;
     transform: scale(0.5);

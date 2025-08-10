@@ -16,12 +16,12 @@ const LoadingComponent = () => {
 
     const cells = [];
 
-    // Create the 10x10 grid of cells
-    for (let i = 0; i < 100; i++) {
+    // Create the 5x5 grid of cells
+    for (let i = 0; i < 25; i++) {
       const cell = document.createElement('div');
       cell.className = styles.cell;
-      const row = Math.floor(i / 10);
-      const col = i % 10;
+      const row = Math.floor(i / 5);
+      const col = i % 5;
       // Stagger the start of each cell's ripple animation
       cell.style.animationDelay = `${(row + col) * 0.027}s`;
       grid.appendChild(cell);
@@ -49,9 +49,10 @@ const LoadingComponent = () => {
       // --- LOGO APPEARANCE ---
       const logoAppearanceDelay = 600;
       setTimeout(() => {
-        const logo = document.createElement('div');
+        const logo = document.createElement('img');
         logo.className = styles.placeholderLogo;
-        logo.textContent = 'S';
+        logo.src = '/smartsheet-logo-blue.svg';
+        logo.alt = 'Smartsheet Logo';
         rippleContainer.appendChild(logo);
       }, logoAppearanceDelay);
     }, convergenceDelay);
