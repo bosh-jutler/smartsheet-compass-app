@@ -23,7 +23,7 @@
  * ==========================================================================
  */
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // --- Placeholder Page Imports ---
@@ -33,6 +33,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import DashboardPage from './components/DashboardPage';
 import MyAssessmentsPage from './components/MyAssessmentsPage';
+import LoadingComponent from './components/LoadingComponent';
 
 function App() {
   return (
@@ -42,26 +43,28 @@ function App() {
       {/* The Routes component is a container for all individual Route definitions.
           It looks through its children <Route> elements to find the best match
           for the current URL. */}
-      <Routes>
-        {/* --- Static Routes --- */}
+      <Suspense fallback={<LoadingComponent />}>
+        <Routes>
+          {/* --- Static Routes --- */}
 
-        {/* This Route handles the root path ('/').
+          {/* This Route handles the root path ('/').
             When the user visits the base URL, the LoginPage component is rendered.
             The 'exact' prop ensures it only matches the root path. */}
-        <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
 
-        {/* This Route handles the '/my-assessments' path.
+          {/* This Route handles the '/my-assessments' path.
             It renders the MyAssessmentsPage component. */}
-        <Route path="/my-assessments" element={<MyAssessmentsPage />} />
+          <Route path="/my-assessments" element={<MyAssessmentsPage />} />
 
-        {/* --- Dynamic Route --- */}
+          {/* --- Dynamic Route --- */}
 
-        {/* This is a dynamic route. The ':sheetId' part is a URL parameter.
+          {/* This is a dynamic route. The ':sheetId' part is a URL parameter.
             'react-router-dom' will match any path like '/dashboard/123' or
             '/dashboard/abc', and the value ('123' or 'abc') will be
             accessible within the DashboardPage component via the useParams hook. */}
-        <Route path="/dashboard/:sheetId" element={<DashboardPage />} />
-      </Routes>
+          <Route path="/dashboard/:sheetId" element={<DashboardPage />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
