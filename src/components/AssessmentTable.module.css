@@ -1,0 +1,35 @@
+/*
+ * ==========================================================================
+ * AssessmentTable.module.css: Styles for AssessmentTable
+ * ==========================================================================
+ */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--brand-white);
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.table th,
+.table td {
+  padding: 16px 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--brand-neutral-35);
+}
+
+.table th {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--brand-blue-800);
+}
+
+.table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.table tbody tr:hover {
+  background-color: var(--brand-neutral-35);
+}

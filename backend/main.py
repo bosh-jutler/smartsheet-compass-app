@@ -89,7 +89,7 @@ async def oauth_callback(code: str):
             raise Exception("Access token not found in response")
 
         # Create a redirect response to the frontend assessments page
-        redirect_response = RedirectResponse(url="http://localhost:5173/assessments")
+        redirect_response = RedirectResponse(url="http://localhost:5173/my-assessments")
         
         # Store the access token in a secure, signed, HTTPOnly cookie
         # This prevents the token from being accessed by client-side JavaScript (XSS)
@@ -144,20 +144,19 @@ async def get_assessments(request: Request):
         response.raise_for_status()
 
         sheet_data = response.json()
-
-        # --- Parse the Sheet Data ---
-        # This logic assumes the following column names in your sheet:
-        # "Assessment Name", "Completion Date", and "Data Sheet ID"
         
         # Create a map of column names to their IDs
         column_map = {col["title"]: col["id"] for col in sheet_data["columns"]}
         
         # Get the IDs for the columns we need
-        name_col_id = column_map.get("Assessment Name")
-        date_col_id = column_map.get("Completion Date")
-        sheet_id_col_id = column_map.get("Data Sheet ID")
+        name_col_id = column_map.get("Customer Name")
+        date_col_id = column_map.get("Created Date")
+        sheet_id_col_id = column_map.get("Assessment ID")
+        industry_col_id = column_map.get("Industry")
+        maturity_score_col_id = column_map.get("Maturity Score")
 
-        if not all([name_col_id, date_col_id, sheet_id_col_id]):
+
+        if not all([name_col_id, date_col_id, sheet_id_col_id, industry_col_id, maturity_score_col_id]):
              return {"error": "Required columns not found in sheet"}, 500
 
         assessments = []
@@ -170,12 +169,17 @@ async def get_assessments(request: Request):
             assessment_name = get_cell_value(name_col_id)
             completion_date = get_cell_value(date_col_id)
             data_sheet_id = get_cell_value(sheet_id_col_id)
+            industry = get_cell_value(industry_col_id)
+            maturity_score = get_cell_value(maturity_score_col_id)
 
-            if all([assessment_name, completion_date, data_sheet_id]):
+            # Ensure all required fields have a value before adding to the list
+            if assessment_name and completion_date and data_sheet_id:
                 assessments.append({
                     "name": assessment_name,
                     "date": completion_date,
-                    "sheetId": str(data_sheet_id), # Ensure sheetId is a string
+                    "sheetId": str(data_sheet_id),  # Ensure sheetId is a string
+                    "industry": industry,
+                    "maturityScore": maturity_score,
                 })
 
         return assessments
@@ -212,10 +216,6 @@ async def get_dashboard_data(sheet_id: str, request: Request):
         response.raise_for_status()
 
         sheet_data = response.json()
-
-        # --- Parse the Sheet Data ---
-        # This logic assumes the sheet has two columns: 'Metric' and 'Value'.
-        # It will transform the rows into a simple list of objects.
         
         column_map = {col["title"]: col["id"] for col in sheet_data["columns"]}
         metric_col_id = column_map.get("Metric")

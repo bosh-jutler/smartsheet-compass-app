@@ -31,8 +31,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // For now, they can be simple components that just render their own name.
 // e.g., const LoginPage = () => <div>LoginPage</div>;
 import LoginPage from './components/LoginPage';
-import AssessmentListPage from './components/AssessmentListPage';
 import DashboardPage from './components/DashboardPage';
+import MyAssessmentsPage from './components/MyAssessmentsPage';
 
 function App() {
   return (
@@ -50,9 +50,9 @@ function App() {
             The 'exact' prop ensures it only matches the root path. */}
         <Route path="/" element={<LoginPage />} />
 
-        {/* This Route handles the '/assessments' path.
-            It renders the AssessmentListPage component. */}
-        <Route path="/assessments" element={<AssessmentListPage />} />
+        {/* This Route handles the '/my-assessments' path.
+            It renders the MyAssessmentsPage component. */}
+        <Route path="/my-assessments" element={<MyAssessmentsPage />} />
 
         {/* --- Dynamic Route --- */}
 
