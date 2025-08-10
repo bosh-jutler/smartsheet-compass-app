@@ -4,32 +4,7 @@ import styles from './AssessmentTable.module.css';
 
 // --- Helper Functions ---
 
-/**
- * Calculates display properties and a label for the maturity score.
- * @param {number} score - The maturity score (0-100).
- * @returns {object} An object with a color class and a text label.
- */
-const getScoreDetails = (score) => {
-  if (score === null || score === undefined) {
-    return { colorClass: '', label: '' };
-  }
-  const scoreNum = Number(score);
-  let colorClass = 'low';
-  let label = 'Initial'; // Default for scores 50 and below
-
-  if (scoreNum >= 81) {
-    colorClass = 'high';
-    label = 'Optimized';
-  } else if (scoreNum >= 51) {
-    colorClass = 'medium';
-    label = 'Defined';
-  }
-
-  return {
-    colorClass: styles[colorClass],
-    label: label,
-  };
-};
+// REMOVED: getScoreDetails function is now passed in as a prop.
 
 /**
  * Formats a YYYY-MM-DD date string into a more readable format.
@@ -48,7 +23,8 @@ const formatDisplayDate = (dateString) => {
 
 // --- Main Table Component ---
 
-const AssessmentTable = ({ assessments }) => {
+// 1. Accept getScoreDetails as a prop
+const AssessmentTable = ({ assessments, getScoreDetails }) => {
   const navigate = useNavigate();
   const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'descending' });
 
@@ -57,6 +33,7 @@ const AssessmentTable = ({ assessments }) => {
     let sortableItems = [...assessments];
     if (sortConfig.key !== null) {
       sortableItems.sort((a, b) => {
+        // ... sorting logic is unchanged
         const aValue = a[sortConfig.key];
         const bValue = b[sortConfig.key];
         if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
@@ -98,6 +75,7 @@ const AssessmentTable = ({ assessments }) => {
       </thead>
       <tbody>
         {sortedAssessments.map((assessment, index) => {
+          // 2. Use the getScoreDetails function from props
           const scoreDetails = getScoreDetails(assessment.maturityScore);
 
           return (
@@ -113,11 +91,11 @@ const AssessmentTable = ({ assessments }) => {
               <td className={styles.cellNumeric}>
                 <div className={styles.scoreContainer}>
                   <span className={styles.scoreText}>{assessment.maturityScore ?? 'N/A'}</span>
-                  {/* The label is only rendered if a score exists */}
-                  {assessment.maturityScore !== null && assessment.maturityScore !== undefined && (
-                     <span className={`${styles.scoreLabel} ${scoreDetails.colorClass}`}>
-                       {scoreDetails.label}
-                     </span>
+                  {scoreDetails.label && (
+                    // 3. Apply the style class based on the name returned from the helper
+                    <span className={`${styles.scoreLabel} ${styles[scoreDetails.colorClassName]}`}>
+                      {scoreDetails.label}
+                    </span>
                   )}
                 </div>
               </td>
