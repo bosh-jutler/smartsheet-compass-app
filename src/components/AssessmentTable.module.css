@@ -4,14 +4,16 @@
  * ==========================================================================
  */
 
+/* KEY CHANGE: Make sure overflow is hidden on the table container */
 .table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   background-color: var(--brand-white);
   border-radius: 15px;
-  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  /* This is critical for clipping the header's corners and the animation */
+  overflow: hidden;
 }
 
 .table th,
@@ -35,4 +37,30 @@
 
 .table tbody tr:hover {
   background-color: var(--brand-neutral-35);
+}
+
+
+/* --- NEW ANIMATION STYLES --- */
+/* Remove any previous @keyframes or animation classes */
+
+@keyframes fanIn {
+  from {
+    /* Start each row slightly up and completely transparent */
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    /* End with the row in its final position and fully visible */
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* This class will be applied to each <tr> in the table body */
+.rowAnimate {
+  animation-name: fanIn;
+  animation-duration: 0.4s; /* How long each individual row animation takes */
+  animation-timing-function: ease-out;
+  /* This is the magic: It ensures the row starts invisible *before* its animation begins */
+  animation-fill-mode: backwards;
 }

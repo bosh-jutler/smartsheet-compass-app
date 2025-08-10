@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './AssessmentTable.module.css';
-import { useState, useMemo } from 'react';
 
 const AssessmentTable = ({ assessments }) => {
   const navigate = useNavigate();
   const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'descending' });
 
+  // Your sorting logic and other functions remain perfectly fine.
   const sortedAssessments = useMemo(() => {
     let sortableItems = [...assessments];
     if (sortConfig.key !== null) {
@@ -24,7 +24,7 @@ const AssessmentTable = ({ assessments }) => {
     }
     return sortableItems;
   }, [assessments, sortConfig]);
-
+  
   const requestSort = (key) => {
     let direction = 'ascending';
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
@@ -37,11 +37,6 @@ const AssessmentTable = ({ assessments }) => {
     navigate(`/dashboard?id=${assessmentId}`);
   };
 
-  const getColumnValue = (row, key) => {
-    // The data structure is now a simple object, so we can access properties directly.
-    return row[key] || 'N/A';
-  };
-
   const getSortDirectionSymbol = (columnId) => {
     if (sortConfig.key !== columnId) {
       return '';
@@ -50,8 +45,10 @@ const AssessmentTable = ({ assessments }) => {
   };
 
   return (
+    // The table itself is the main container. No extra wrappers needed.
     <table className={styles.table}>
       <thead>
+        {/* The header will appear instantly, providing a nice anchor point */}
         <tr>
           <th onClick={() => requestSort('date')}>
             Created Date{getSortDirectionSymbol('date')}
@@ -68,8 +65,16 @@ const AssessmentTable = ({ assessments }) => {
         </tr>
       </thead>
       <tbody>
-        {sortedAssessments.map(assessment => (
-          <tr key={assessment.sheetId} onClick={() => handleRowClick(assessment.sheetId)}>
+        {/* KEY CHANGE: Get the 'index' from the map function */}
+        {sortedAssessments.map((assessment, index) => (
+          <tr
+            key={assessment.sheetId}
+            onClick={() => handleRowClick(assessment.sheetId)}
+            // 1. Add the animation class
+            className={styles.rowAnimate}
+            // 2. Add the dynamic animation delay using an inline style
+            style={{ animationDelay: `${index * 0.05}s` }} // Stagger each row by 50ms
+          >
             <td>{assessment.date}</td>
             <td>{assessment.name}</td>
             <td>{assessment.industry || 'N/A'}</td>
