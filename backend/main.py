@@ -138,6 +138,15 @@ async def get_assessments(request: Request):
             "Content-Type": "application/json",
         }
 
+        # Get the current user's email from Smartsheet
+        user_profile_url = "https://api.smartsheet.com/2.0/users/me"
+        user_response = requests.get(user_profile_url, headers=headers)
+        user_response.raise_for_status()
+        user_email = user_response.json().get("email")
+
+        if not user_email:
+            return {"error": "Could not retrieve user email"}, 500
+
         # Make the API call to get the specific sheet
         sheet_url = f"https://api.smartsheet.com/2.0/sheets/{ASSESSMENTS_INDEX_SHEET_ID}"
         response = requests.get(sheet_url, headers=headers)
@@ -154,9 +163,10 @@ async def get_assessments(request: Request):
         sheet_id_col_id = column_map.get("Assessment ID")
         industry_col_id = column_map.get("Industry")
         maturity_score_col_id = column_map.get("Maturity Score")
+        submitter_col_id = column_map.get("Submitter")
 
 
-        if not all([name_col_id, date_col_id, sheet_id_col_id, industry_col_id, maturity_score_col_id]):
+        if not all([name_col_id, date_col_id, sheet_id_col_id, industry_col_id, maturity_score_col_id, submitter_col_id]):
              return {"error": "Required columns not found in sheet"}, 500
 
         assessments = []
@@ -166,21 +176,25 @@ async def get_assessments(request: Request):
                 cell = next((c for c in row["cells"] if c["columnId"] == col_id), None)
                 return cell.get("value") if cell else None
 
-            assessment_name = get_cell_value(name_col_id)
-            completion_date = get_cell_value(date_col_id)
-            data_sheet_id = get_cell_value(sheet_id_col_id)
-            industry = get_cell_value(industry_col_id)
-            maturity_score = get_cell_value(maturity_score_col_id)
+            submitter_email = get_cell_value(submitter_col_id)
 
-            # Ensure all required fields have a value before adding to the list
-            if assessment_name and completion_date and data_sheet_id:
-                assessments.append({
-                    "name": assessment_name,
-                    "date": completion_date,
-                    "sheetId": str(data_sheet_id),  # Ensure sheetId is a string
-                    "industry": industry,
-                    "maturityScore": maturity_score,
-                })
+            # Filter rows by the logged-in user's email
+            if submitter_email and submitter_email.lower() == user_email.lower():
+                assessment_name = get_cell_value(name_col_id)
+                completion_date = get_cell_value(date_col_id)
+                data_sheet_id = get_cell_value(sheet_id_col_id)
+                industry = get_cell_value(industry_col_id)
+                maturity_score = get_cell_value(maturity_score_col_id)
+
+                # Ensure all required fields have a value before adding to the list
+                if assessment_name and completion_date and data_sheet_id:
+                    assessments.append({
+                        "name": assessment_name,
+                        "date": completion_date,
+                        "sheetId": str(data_sheet_id),  # Ensure sheetId is a string
+                        "industry": industry,
+                        "maturityScore": maturity_score,
+                    })
 
         return assessments
 
