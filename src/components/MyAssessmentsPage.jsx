@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import AssessmentTable from './AssessmentTable';
 import LoadingComponent from './LoadingComponent';
+import MetricWidget from './MetricWidget';
 import styles from './MyAssessmentsPage.module.css';
 
 // Helper function to determine score label and color
@@ -133,6 +134,16 @@ const MyAssessmentsPage = () => {
     <div className={styles.container}>
       <div className={styles.pageHeader}>
         <h1 className={styles.header}>MY ASSESSMENTS</h1>
+      </div>
+
+      <div style={{
+        width: 'calc(33.33% - 16px)',
+        marginRight: '24px',
+        marginBottom: '24px',
+        display: 'inline-block',
+        verticalAlign: 'top'
+      }}>
+        <MetricWidget />
       </div>
       
       <div className={styles.card}>

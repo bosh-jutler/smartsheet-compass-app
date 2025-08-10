@@ -260,5 +260,66 @@ async def get_dashboard_data(sheet_id: str, request: Request):
         print(f"Error fetching dashboard data: {e}")
         return {"error": "Failed to fetch dashboard data"}, 500
 
+@app.get("/api/assessments/total")
+async def get_total_assessments(request: Request):
+    """
+    Fetches the total number of assessments for the logged-in user.
+    """
+    try:
+        # Retrieve the signed access token from the secure cookie
+        signed_token = request.cookies.get("access_token")
+        if not signed_token:
+            return {"error": "Not authenticated"}, 401
 
+        # Un-sign the cookie to get the actual access token
+        access_token = serializer.loads(signed_token)
 
+        # Prepare the authenticated request to the Smartsheet API
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+        }
+
+        # Get the current user's email from Smartsheet
+        user_profile_url = "https://api.smartsheet.com/2.0/users/me"
+        user_response = requests.get(user_profile_url, headers=headers)
+        user_response.raise_for_status()
+        user_email = user_response.json().get("email")
+
+        if not user_email:
+            return {"error": "Could not retrieve user email"}, 500
+
+        # Make the API call to get the specific sheet
+        sheet_url = f"https://api.smartsheet.com/2.0/sheets/{ASSESSMENTS_INDEX_SHEET_ID}"
+        response = requests.get(sheet_url, headers=headers)
+        response.raise_for_status()
+
+        sheet_data = response.json()
+        
+        # Create a map of column names to their IDs
+        column_map = {col["title"]: col["id"] for col in sheet_data["columns"]}
+        
+        # Get the IDs for the columns we need
+        submitter_col_id = column_map.get("Submitter")
+
+        if not submitter_col_id:
+             return {"error": "Required columns not found in sheet"}, 500
+
+        total_assessments = 0
+        for row in sheet_data["rows"]:
+            # Helper function to get cell value by column ID
+            def get_cell_value(col_id):
+                cell = next((c for c in row["cells"] if c["columnId"] == col_id), None)
+                return cell.get("value") if cell else None
+
+            submitter_email = get_cell_value(submitter_col_id)
+
+            # Filter rows by the logged-in user's email
+            if submitter_email and submitter_email.lower() == user_email.lower():
+                total_assessments += 1
+
+        return {"total": total_assessments}
+
+    except Exception as e:
+        print(f"Error fetching total assessments: {e}")
+        return {"error": "Failed to fetch total assessments"}, 500
