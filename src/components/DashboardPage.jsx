@@ -18,7 +18,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import LoadingComponent from './LoadingComponent';
 
 // A reusable card component for our "bento box" grid
@@ -87,7 +87,7 @@ const DashboardPage = () => {
 
   // --- Render Functions for Different States ---
 
-  if (isLoading) return <LoadingComponent />;
+  if (isLoading) return <LoadingComponent />;
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -102,24 +102,36 @@ const DashboardPage = () => {
     },
     header: {
       display: 'flex',
-      justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: '32px',
+      gap: '9px',
     },
-    title: {
+    // The h1 tag now acts as a flex container for the text parts
+    titleContainer: {
+      display: 'flex',
+      alignItems: 'baseline', // Aligns 'COMPASS' and 'by' along their baseline
+      gap: '12px',
       color: 'var(--brand-blue-800)',
-      fontSize: '40px',
+    },
+    // Style for the "COMPASS" part
+    titleMain: {
+      fontSize: '60px',
+      fontWeight: '900',
+      lineHeight: 1,
+      paddingRight: '5px',
+    },
+    // Style for the "by" part
+    titleBy: {
+      fontSize: '20px',
       fontWeight: '600',
     },
-    backLink: {
-      color: 'var(--brand-blue-500)',
-      textDecoration: 'none',
-      fontSize: '16px',
+    logo: {
+      height: '18px',
+      transform: 'translateY(17px)',
     },
     grid: {
       display: 'grid',
       gap: '24px',
-      // Defines a responsive grid layout for the bento boxes
       gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
       gridTemplateRows: 'auto',
     },
@@ -128,10 +140,12 @@ const DashboardPage = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 style={styles.title}>{dashboardData?.sheetName || 'Dashboard'}</h1>
-        <Link to="/my-assessments" style={styles.backLink}>
-          &larr; Back to Assessments
-        </Link>
+        {/* The h1 now contains two spans for separate styling */}
+        <h1 style={styles.titleContainer}>
+          <span style={styles.titleMain}>COMPASS</span>
+          <span style={styles.titleBy}>by</span>
+        </h1>
+        <img src="/smartsheet-logo-blue.svg" alt="Smartsheet Logo" style={styles.logo} />
       </div>
       {dashboardData?.metrics ? (
         <div style={styles.grid}>
