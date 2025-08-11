@@ -34,13 +34,16 @@ const AssessmentTable = ({
 }) => {
   const navigate = useNavigate();
 
+  // --- UPDATED ---
+  // Changed the navigation to use a URL parameter to match the
+  // DashboardPage's use of the `useParams` hook.
   const handleRowClick = (assessmentId) => {
-    navigate(`/dashboard?id=${assessmentId}`);
+    // Navigates to a URL like /dashboard/123456789
+    navigate(`/dashboard/${assessmentId}`);
   };
 
   const getSortDirectionSymbol = (columnId) => {
     if (sortConfig.key !== columnId) return null;
-    // Using a more subtle arrow icon
     return sortConfig.direction === 'ascending' ? ' ▲' : ' ▼';
   };
 
