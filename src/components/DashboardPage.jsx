@@ -104,7 +104,7 @@ const DashboardPage = () => {
       display: 'flex',
       alignItems: 'center',
       marginBottom: '32px',
-      gap: '9px',
+      gap: '8px',
     },
     // The h1 tag now acts as a flex container for the text parts
     titleContainer: {
@@ -118,7 +118,7 @@ const DashboardPage = () => {
       fontSize: '60px',
       fontWeight: '900',
       lineHeight: 1,
-      paddingRight: '5px',
+      paddingRight: '4px',
     },
     // Style for the "by" part
     titleBy: {
@@ -127,7 +127,7 @@ const DashboardPage = () => {
     },
     logo: {
       height: '18px',
-      transform: 'translateY(17px)',
+      transform: 'translateY(18px)',
     },
     grid: {
       display: 'grid',
