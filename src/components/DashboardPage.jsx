@@ -19,6 +19,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import LoadingComponent from './LoadingComponent';
 
 // A reusable card component for our "bento box" grid
 const DashboardCard = ({ title, value, gridArea }) => {
@@ -86,9 +87,7 @@ const DashboardPage = () => {
 
   // --- Render Functions for Different States ---
 
-  if (isLoading) {
-    return <div>Loading dashboard...</div>;
-  }
+  if (isLoading) return <LoadingComponent />;
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -130,7 +129,7 @@ const DashboardPage = () => {
     <div style={styles.container}>
       <div style={styles.header}>
         <h1 style={styles.title}>{dashboardData?.sheetName || 'Dashboard'}</h1>
-        <Link to="/assessments" style={styles.backLink}>
+        <Link to="/my-assessments" style={styles.backLink}>
           &larr; Back to Assessments
         </Link>
       </div>
