@@ -8,6 +8,7 @@ const BackgroundShapes = () => {
     left: 0,
     right: 0,
     bottom: 0,
+    // zIndex changed to 0 to interact correctly with the content zIndex
     zIndex: 0,
     overflow: 'hidden',
   };
@@ -21,78 +22,50 @@ const BackgroundShapes = () => {
         preserveAspectRatio="xMidYMid slice"
       >
         <g fillRule="evenodd" fillOpacity="0.4">
-          {/* Left Side Shapes */}
-          <g fill="#7847DC"> {/* Purple */}
-            {/* Changed back to a half-circle */}
-            <path d="M-50 250 A 200 200 0 0 1 -50 650 Z" />
-          </g>
-          <g fill="#ebad1c"> {/* Gold */}
-            <path d="M-120 700 L280 850 L220 1100 L-100 1050 Z" />
-          </g>
-          
-          {/* Right Side Shapes */}
-          <g fill="#05705a"> {/* Green */}
-            <path d="M1620 -50 L1180 120 L1250 420 L1600 320 Z" />
-          </g>
-          <g fill="#7847DC"> {/* Purple */}
-            <path d="M1580 480 L1200 550 L1250 850 L1560 780 Z" />
-          </g>
-          <g fill="#ebad1c"> {/* Gold */}
-            <path d="M1600 880 L1300 1124 L1550 1150 L1650 1000 Z" />
-          </g>
+          <g fill="#7847DC"><path d="M-50 250 A 200 200 0 0 1 -50 650 Z" /></g>
+          <g fill="#ebad1c"><path d="M-120 700 L280 850 L220 1100 L-100 1050 Z" /></g>
+          <g fill="#05705a"><path d="M1620 -50 L1180 120 L1250 420 L1600 320 Z" /></g>
+          <g fill="#7847DC"><path d="M1580 480 L1200 550 L1250 850 L1560 780 Z" /></g>
+          <g fill="#ebad1c"><path d="M1600 880 L1300 1124 L1550 1150 L1650 1000 Z" /></g>
         </g>
       </svg>
     </div>
   );
 };
 
+const LoadingComponent = () => (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '18px', fontFamily: '"TT Norms", sans-serif', color: '#555' }}>
+        Loading Report...
+    </div>
+);
 
-// A simple placeholder for the LoadingComponent
-const LoadingComponent = () => {
-  const styles = {
-    container: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      fontSize: '18px',
-      fontFamily: '"TT Norms", sans-serif',
-      color: '#555',
-    },
-  };
-  return <div style={styles.container}>Loading...</div>;
-};
-
-// A reusable card component
-const DashboardCard = ({ title, value }) => {
+const ExecutiveSummaryCard = ({ summary }) => {
   const cardStyle = {
-    backgroundColor: 'var(--brand-white, #ffffff)',
-    padding: '24px',
-    borderRadius: '15px',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backdropFilter: 'blur(10px)',
+    padding: '32px 40px',
+    borderRadius: '20px',
+    boxShadow: '0 8px 30px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
   };
-
   const titleStyle = {
-    fontSize: '16px',
-    color: 'var(--brand-blue-700, #1d4ed8)',
-    opacity: 0.9,
-    marginBottom: '8px',
-  };
-
-  const valueStyle = {
-    fontSize: '40px',
+    fontSize: '24px',
     fontWeight: '600',
-    color: 'var(--brand-sky-500, #0ea5e9)',
-    lineHeight: '1.2',
+    color: '#031c59',
+    marginBottom: '16px',
+    borderBottom: '2px solid #e0e0e0',
+    paddingBottom: '12px',
   };
-
+  const textStyle = {
+    fontSize: '16px',
+    color: '#334155',
+    lineHeight: '1.7',
+    whiteSpace: 'pre-wrap',
+  };
   return (
     <div style={cardStyle}>
-      <h3 style={titleStyle}>{title}</h3>
-      <p style={valueStyle}>{value}</p>
+      <h3 style={titleStyle}>Executive Summary</h3>
+      <p style={textStyle}>{summary}</p>
     </div>
   );
 };
@@ -131,105 +104,95 @@ const DashboardPage = () => {
       setLibsLoaded(true);
     }).catch(err => {
       console.error(err);
-      setPdfError('PDF export is unavailable.');
+      setPdfError('PDF export libraries failed to load.');
     });
   }, []);
 
   useEffect(() => {
+    if (!sheetId) return;
     const fetchDashboardData = async () => {
+      setIsLoading(true);
       try {
-        const mockData = {
-          metrics: [
-            { title: "Customer Name", value: "Terraverde Logistics" },
-            { title: "Industry", value: "Transportation" },
-            { title: "Created Date", value: "Aug 11, 2025" },
-            { title: "Maturity Score", value: "23" }
-          ]
-        };
-        setDashboardData(mockData);
+        const response = await fetch(`/api/dashboard/${sheetId}`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch dashboard data.');
+        }
+        setDashboardData(await response.json());
       } catch (err) {
         setError(err.message);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchDashboardData();
   }, [sheetId]);
 
   const handleDownloadPdf = async () => {
-    if (!dashboardRef.current || !libsLoaded || pdfError) return;
-    setIsDownloading(true);
+    if (!dashboardRef.current || !libsLoaded || pdfError || !dashboardData) return;
 
-    if (buttonContainerRef.current) {
-        buttonContainerRef.current.style.visibility = 'hidden';
-    }
+    setIsDownloading(true);
+    if (buttonContainerRef.current) buttonContainerRef.current.style.visibility = 'hidden';
 
     try {
       const { jsPDF } = window.jspdf;
-      const canvas = await window.html2canvas(dashboardRef.current, {
-        scale: 3,
-      });
-
+      const canvas = await window.html2canvas(dashboardRef.current, { scale: 2, useCORS: true, backgroundColor: null }); // Set background to null for transparency
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: canvas.width > canvas.height ? 'l' : 'p',
-        unit: 'px',
-        format: [canvas.width, canvas.height],
-      });
-
+      const pdf = new jsPDF({ orientation: 'p', unit: 'px', format: [canvas.width, canvas.height] });
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-      pdf.save(`Compass_Dashboard_${sheetId || 'export'}.pdf`);
-
+      const safeCustomerName = (dashboardData?.customerName || 'Report').replace(/[^a-z0-9]/gi, '_');
+      pdf.save(`Compass_Report_${safeCustomerName}.pdf`);
     } catch (err) {
       console.error("Could not generate PDF", err);
       setPdfError("An error occurred while generating the PDF.");
     } finally {
-      if (buttonContainerRef.current) {
-        buttonContainerRef.current.style.visibility = 'visible';
-      }
+      if (buttonContainerRef.current) buttonContainerRef.current.style.visibility = 'visible';
       setIsDownloading(false);
     }
   };
 
   if (isLoading) return <LoadingComponent />;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div style={{textAlign: 'center', paddingTop: '5rem', fontSize: '1.2rem'}}>Error: {error}</div>;
 
   const styles = {
     container: {
-      padding: '48px',
+      padding: '48px 32px',
       backgroundColor: '#f0f2f5',
       minHeight: '100vh',
       fontFamily: '"TT Norms", sans-serif',
+      display: 'flex',
+      justifyContent: 'center',
+      // Added position: relative to act as a container for the shapes
       position: 'relative',
-      overflow: 'hidden',
     },
     contentWrapper: {
+      width: '100%',
+      maxWidth: '1200px',
+      // Added position and zIndex to place content above the shapes
       position: 'relative',
       zIndex: 1,
     },
     header: {
       display: 'flex',
+      // Changed to flex-end to align bottoms of title and button
       alignItems: 'flex-end',
       justifyContent: 'space-between',
-      marginBottom: '32px',
-      gap: '16px',
+      marginBottom: '16px', // Adjusted margin
+      gap: '24px',
     },
-    titleContainer: {
-      display: 'flex',
-      alignItems: 'baseline',
-      gap: '12px',
-      color: '#031c59',
-    },
+    // titleGroup is no longer needed
     titleMain: {
       fontSize: '60px',
       fontWeight: '900',
-      lineHeight: 1,
+      lineHeight: 1.1,
+      color: '#031c59',
+      wordBreak: 'break-word',
     },
-    grid: {
-      display: 'grid',
-      gap: '24px',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    createdDateText: {
+      fontSize: '20px',
+      color: '#475569',
+      marginTop: '8px', // Adjusted margin
+      marginBottom: '24px', // Added margin for spacing
     },
   };
   
@@ -246,6 +209,7 @@ const DashboardPage = () => {
       background-color: transparent;
       color: #031c59;
       border: 2px solid #031c59;
+      transition: all 0.2s ease-in-out;
     }
     .download-button:hover:not(:disabled) {
       background-color: #031c59;
@@ -260,42 +224,44 @@ const DashboardPage = () => {
   `;
 
   return (
-    <div style={styles.container} ref={dashboardRef}>
-      <style>{allButtonStyles}</style>
+    <div style={styles.container}>
+      {/* Moved BackgroundShapes to be a sibling of the content */}
       <BackgroundShapes />
       <div style={styles.contentWrapper}>
-        <div style={styles.header}>
-          <h1 style={styles.titleContainer}>
-            <span style={styles.titleMain}>COMPASS</span>
-          </h1>
-          <div ref={buttonContainerRef}>
-            <button
-              className="download-button"
-              onClick={handleDownloadPdf}
-              disabled={isDownloading || !libsLoaded || pdfError}
-              title={pdfError || ''}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.905 3.079V2.75z" />
-                <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
-              </svg>
-              <span>{isDownloading ? 'Generating...' : 'Generate Customer Report'}</span>
-            </button>
+        <div ref={dashboardRef}>
+          <style>{allButtonStyles}</style>
+          {/* Header layout simplified for proper alignment */}
+          <div style={styles.header}>
+            <span style={styles.titleMain}>
+                {dashboardData?.customerName || 'Customer Report'}
+            </span>
+            <div ref={buttonContainerRef}>
+                <button
+                    className="download-button"
+                    onClick={handleDownloadPdf}
+                    disabled={isDownloading || !libsLoaded || !!pdfError || !dashboardData}
+                    title={pdfError || 'Generate a PDF of this report'}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.905 3.079V2.75z" />
+                        <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+                    </svg>
+                    <span>{isDownloading ? 'Generating...' : 'Generate Customer Report'}</span>
+                </button>
+            </div>
           </div>
+          {/* Date is now separate from the header for cleaner layout */}
+          {dashboardData?.createdDate && (
+              <p style={styles.createdDateText}>
+              Created on: {dashboardData.createdDate}
+              </p>
+          )}
+          {dashboardData?.executiveSummary ? (
+              <ExecutiveSummaryCard summary={dashboardData.executiveSummary} />
+          ) : (
+              <p>No Executive Summary found for this report.</p>
+          )}
         </div>
-        {dashboardData?.metrics ? (
-          <div style={styles.grid}>
-            {dashboardData.metrics.map((metric) => (
-              <DashboardCard
-                key={metric.title}
-                title={metric.title}
-                value={metric.value}
-              />
-            ))}
-          </div>
-        ) : (
-          <p>No dashboard data found.</p>
-        )}
       </div>
     </div>
   );
