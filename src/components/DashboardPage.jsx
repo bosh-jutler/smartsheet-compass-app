@@ -21,10 +21,12 @@ const BackgroundShapes = () => {
         preserveAspectRatio="xMidYMid slice"
       >
         <g fillRule="evenodd" fillOpacity="0.4">
-          <g fill="#7847DC"><path d="M-50 250 A 200 200 0 0 1 -50 650 Z" /></g>
-          <g fill="#ebad1c"><path d="M-120 700 L280 850 L220 1100 L-100 1050 Z" /></g>
-          <g fill="#05705a"><path d="M1620 -50 L1180 120 L1250 420 L1600 320 Z" /></g>
-          <g fill="#7847DC"><path d="M1580 480 L1200 550 L1250 850 L1560 780 Z" /></g>
+          {/* Changed fill from #7847DC to #05705a */}
+          <g fill="#05705a"><path d="M-50 250 A 200 200 0 0 1 -50 650 Z" /></g>
+          {/* The yellow shape in the bottom-left has been removed. */}
+          {/* The green shape in the top-right has been removed. */}
+          {/* Changed fill from #7847DC to #ebad1c */}
+          <g fill="#ebad1c"><path d="M1580 480 L1200 550 L1250 850 L1560 780 Z" /></g>
           <g fill="#ebad1c"><path d="M1600 880 L1300 1124 L1550 1150 L1650 1000 Z" /></g>
         </g>
       </svg>
@@ -82,7 +84,7 @@ const MaturityScoreVisual = ({ score }) => {
         },
         indicatorContainer: {
             position: 'relative',
-            height: '80px', 
+            height: '80px',
             marginBottom: '4px',
         },
         arrowIndicator: {
@@ -293,7 +295,7 @@ const DashboardPage = () => {
 
     try {
       const { jsPDF } = window.jspdf;
-      
+
       const canvas = await window.html2canvas(element, {
         scale: 3,
         useCORS: true,
@@ -311,7 +313,7 @@ const DashboardPage = () => {
         format: [canvas.width, canvas.height],
         hotfixes: ['px_scaling'],
       });
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
       const safeCustomerName = (dashboardData?.customerName || 'Report').replace(/[^a-z0-9]/gi, '_');
       pdf.save(`Compass_Report_${safeCustomerName}.pdf`);
@@ -326,7 +328,7 @@ const DashboardPage = () => {
 
   if (isLoading) return <LoadingComponent />;
   if (error) return <div style={{textAlign: 'center', paddingTop: '5rem', fontSize: '1.2rem'}}>Error: {error}</div>;
-  
+
   const allButtonStyles = `
     .download-button {
       display: inline-flex;
@@ -393,7 +395,7 @@ const DashboardPage = () => {
           {dashboardData?.maturityScore !== null && typeof dashboardData?.maturityScore !== 'undefined' && (
               <MaturityScoreVisual score={dashboardData.maturityScore} />
           )}
-          
+
         </div>
       </div>
     </div>
