@@ -1,30 +1,12 @@
-/*
- * ==========================================================================
- * DashboardPage.jsx: Renders the dynamic data visualization dashboard
- * ==========================================================================
- *
- * Description:
- * This component is the heart of the Compass application. It fetches and
- * displays the detailed data for a single assessment from a specific sheet.
- *
- * It uses the `useParams` hook from react-router-dom to extract the sheetId
- * from the URL. An authenticated API call is then made to a new backend
- * endpoint (`/api/dashboard/:sheetId`) to get the sheet's data.
- *
- * The dashboard is rendered as a responsive "bento box" grid, with each
- * piece of data displayed in its own card.
- *
- * ==========================================================================
- */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import LoadingComponent from './LoadingComponent';
 
 // A reusable card component for our "bento box" grid
-const DashboardCard = ({ title, value, gridArea }) => {
+const DashboardCard = ({ title, value }) => {
   const cardStyle = {
-    gridArea: gridArea,
     backgroundColor: 'var(--brand-white)',
     padding: '24px',
     borderRadius: '15px',
@@ -57,15 +39,13 @@ const DashboardCard = ({ title, value, gridArea }) => {
 };
 
 const DashboardPage = () => {
-  // Get the dynamic sheetId from the URL
   const { sheetId } = useParams();
-
-  // State for dashboard data, loading, and errors
   const [dashboardData, setDashboardData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const buttonRef = useRef();
 
-  // Fetch data for the specific sheet when the component mounts
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -83,17 +63,71 @@ const DashboardPage = () => {
     };
 
     fetchDashboardData();
-  }, [sheetId]); // Re-run the effect if the sheetId changes
+  }, [sheetId]);
 
-  // --- Render Functions for Different States ---
+  const handleDownloadPdf = async () => {
+    setIsDownloading(true);
+
+    if (buttonRef.current) {
+      buttonRef.current.style.display = 'none';
+    }
+
+    const body = document.body;
+    const html = document.documentElement;
+    const originalWidth = body.style.width;
+
+    try {
+      const fullWidth = Math.max(
+        body.scrollWidth,
+        body.offsetWidth,
+        html.clientWidth,
+        html.scrollWidth,
+        html.offsetWidth
+      );
+      const fullHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+
+      body.style.width = `${fullWidth}px`;
+
+      const canvas = await html2canvas(body, {
+        // MODIFIED: Increased scale for higher resolution
+        scale: 3,
+        useCORS: true,
+        width: fullWidth,
+        height: fullHeight,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const orientation = fullWidth > fullHeight ? 'l' : 'p';
+
+      const pdf = new jsPDF({
+        orientation: orientation,
+        unit: 'px',
+        format: [fullWidth, fullHeight],
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, fullWidth, fullHeight);
+      pdf.save(`Compass_Dashboard_${sheetId}.pdf`);
+    } catch (err) {
+      console.error("Could not generate PDF", err);
+      alert("An error occurred while generating the PDF.");
+    } finally {
+      body.style.width = originalWidth;
+      if (buttonRef.current) {
+        buttonRef.current.style.display = 'block';
+      }
+      setIsDownloading(false);
+    }
+  };
 
   if (isLoading) return <LoadingComponent />;
+  if (error) return <div>Error: {error}</div>;
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  // --- Main Component Styles ---
   const styles = {
     container: {
       padding: '48px',
@@ -103,24 +137,22 @@ const DashboardPage = () => {
     header: {
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'space-between',
       marginBottom: '32px',
-      gap: '8px',
+      gap: '16px',
     },
-    // The h1 tag now acts as a flex container for the text parts
     titleContainer: {
       display: 'flex',
-      alignItems: 'baseline', // Aligns 'COMPASS' and 'by' along their baseline
+      alignItems: 'baseline',
       gap: '12px',
       color: 'var(--brand-blue-800)',
     },
-    // Style for the "COMPASS" part
     titleMain: {
       fontSize: '60px',
       fontWeight: '900',
       lineHeight: 1,
       paddingRight: '4px',
     },
-    // Style for the "by" part
     titleBy: {
       fontSize: '20px',
       fontWeight: '600',
@@ -135,21 +167,48 @@ const DashboardPage = () => {
       gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
       gridTemplateRows: 'auto',
     },
+    downloadButton: {
+      backgroundColor: 'var(--brand-blue-500)',
+      color: 'white',
+      border: 'none',
+      padding: '12px 24px',
+      borderRadius: '8px',
+      fontSize: '16px',
+      fontWeight: '600',
+      cursor: 'pointer',
+      transition: 'background-color 0.2s ease',
+    },
+    downloadButtonDisabled: {
+      backgroundColor: 'var(--brand-neutral-200)',
+      cursor: 'not-allowed',
+    },
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        {/* The h1 now contains two spans for separate styling */}
-        <h1 style={styles.titleContainer}>
-          <span style={styles.titleMain}>COMPASS</span>
-          <span style={styles.titleBy}>by</span>
-        </h1>
-        <img src="/smartsheet-logo-blue.svg" alt="Smartsheet Logo" style={styles.logo} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h1 style={styles.titleContainer}>
+            <span style={styles.titleMain}>COMPASS</span>
+            <span style={styles.titleBy}>by</span>
+          </h1>
+          <img src="/smartsheet-logo-blue.svg" alt="Smartsheet Logo" style={styles.logo} />
+        </div>
+
+        <button
+          ref={buttonRef}
+          onClick={handleDownloadPdf}
+          disabled={isDownloading}
+          style={{
+            ...styles.downloadButton,
+            ...(isDownloading ? styles.downloadButtonDisabled : {}),
+          }}
+        >
+          {isDownloading ? 'Generating PDF...' : 'Download PDF'}
+        </button>
       </div>
       {dashboardData?.metrics ? (
         <div style={styles.grid}>
-          {/* Map over the fetched metrics and render a card for each one */}
           {dashboardData.metrics.map((metric, index) => (
             <DashboardCard
               key={index}
