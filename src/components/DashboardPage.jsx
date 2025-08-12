@@ -40,12 +40,13 @@ const LoadingComponent = () => (
 
 const ExecutiveSummaryCard = ({ summary }) => {
   const cardStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    backdropFilter: 'blur(10px)',
+    // *** MODIFIED: Set background to solid white and removed backdropFilter ***
+    backgroundColor: '#ffffff',
     padding: '32px 40px',
     borderRadius: '20px',
     boxShadow: '0 8px 30px rgba(0, 0, 0, 0.1)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    // *** MODIFIED: Changed border to be visible on a white background ***
+    border: '1px solid #e0e0e0',
   };
   const titleStyle = {
     fontSize: '22px',
@@ -166,7 +167,6 @@ const DashboardPage = () => {
   };
 
   const handleDownloadPdf = async () => {
-    // *** FIX: Target the container element which holds the background color and shapes ***
     const element = dashboardRef.current;
     if (!element || !libsLoaded || pdfError || !dashboardData) return;
 
@@ -179,7 +179,6 @@ const DashboardPage = () => {
       const canvas = await window.html2canvas(element, {
         scale: 2,
         useCORS: true,
-        // *** FIX: Explicitly set the background color to match the page ***
         backgroundColor: styles.container.backgroundColor,
         width: element.scrollWidth,
         height: element.scrollHeight,
@@ -192,7 +191,7 @@ const DashboardPage = () => {
         orientation: orientation,
         unit: 'px',
         format: [canvas.width, canvas.height],
-        hotfixes: ['px_scaling'], // Important hotfix for pixel-perfect rendering
+        hotfixes: ['px_scaling'],
       });
       
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
@@ -220,7 +219,8 @@ const DashboardPage = () => {
       font-weight: 500;
       border-radius: 12px;
       cursor: pointer;
-      background-color: transparent;
+      /* *** MODIFIED: Changed background to match page color *** */
+      background-color: #f0f2f5;
       color: #031c59;
       border: 2px solid #031c59;
       transition: all 0.2s ease-in-out;
@@ -238,11 +238,10 @@ const DashboardPage = () => {
   `;
 
   return (
-    // *** FIX: The ref is now on the top-level container to capture everything ***
     <div style={styles.container} ref={dashboardRef}>
       <BackgroundShapes />
       <div style={styles.contentWrapper}>
-        <div> {/* This div no longer needs a ref */}
+        <div>
           <style>{allButtonStyles}</style>
           <div style={styles.header}>
             <span style={styles.titleMain}>
