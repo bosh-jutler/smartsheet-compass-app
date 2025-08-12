@@ -8,7 +8,6 @@ const BackgroundShapes = () => {
     left: 0,
     right: 0,
     bottom: 0,
-    // zIndex changed to 0 to interact correctly with the content zIndex
     zIndex: 0,
     overflow: 'hidden',
   };
@@ -49,7 +48,7 @@ const ExecutiveSummaryCard = ({ summary }) => {
     border: '1px solid rgba(255, 255, 255, 0.2)',
   };
   const titleStyle = {
-    fontSize: '24px',
+    fontSize: '22px',
     fontWeight: '600',
     color: '#031c59',
     marginBottom: '16px',
@@ -128,17 +127,74 @@ const DashboardPage = () => {
     fetchDashboardData();
   }, [sheetId]);
 
+  const styles = {
+    container: {
+      padding: '48px 32px',
+      backgroundColor: '#f0f2f5',
+      minHeight: '100vh',
+      fontFamily: '"TT Norms", sans-serif',
+      display: 'flex',
+      justifyContent: 'center',
+      position: 'relative',
+    },
+    contentWrapper: {
+      width: '100%',
+      maxWidth: '1200px',
+      position: 'relative',
+      zIndex: 1,
+    },
+    header: {
+      display: 'flex',
+      alignItems: 'flex-end',
+      justifyContent: 'space-between',
+      marginBottom: '16px',
+      gap: '24px',
+    },
+    titleMain: {
+      fontSize: '60px',
+      fontWeight: '900',
+      lineHeight: 1.1,
+      color: '#031c59',
+      wordBreak: 'break-word',
+    },
+    createdDateText: {
+      fontSize: '16px',
+      color: '#475569',
+      marginTop: '8px',
+      marginBottom: '24px',
+    },
+  };
+
   const handleDownloadPdf = async () => {
-    if (!dashboardRef.current || !libsLoaded || pdfError || !dashboardData) return;
+    // *** FIX: Target the container element which holds the background color and shapes ***
+    const element = dashboardRef.current;
+    if (!element || !libsLoaded || pdfError || !dashboardData) return;
 
     setIsDownloading(true);
     if (buttonContainerRef.current) buttonContainerRef.current.style.visibility = 'hidden';
 
     try {
       const { jsPDF } = window.jspdf;
-      const canvas = await window.html2canvas(dashboardRef.current, { scale: 2, useCORS: true, backgroundColor: null }); // Set background to null for transparency
+      
+      const canvas = await window.html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        // *** FIX: Explicitly set the background color to match the page ***
+        backgroundColor: styles.container.backgroundColor,
+        width: element.scrollWidth,
+        height: element.scrollHeight,
+      });
+
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({ orientation: 'p', unit: 'px', format: [canvas.width, canvas.height] });
+      const orientation = canvas.width > canvas.height ? 'l' : 'p';
+
+      const pdf = new jsPDF({
+        orientation: orientation,
+        unit: 'px',
+        format: [canvas.width, canvas.height],
+        hotfixes: ['px_scaling'], // Important hotfix for pixel-perfect rendering
+      });
+      
       pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
       const safeCustomerName = (dashboardData?.customerName || 'Report').replace(/[^a-z0-9]/gi, '_');
       pdf.save(`Compass_Report_${safeCustomerName}.pdf`);
@@ -153,48 +209,6 @@ const DashboardPage = () => {
 
   if (isLoading) return <LoadingComponent />;
   if (error) return <div style={{textAlign: 'center', paddingTop: '5rem', fontSize: '1.2rem'}}>Error: {error}</div>;
-
-  const styles = {
-    container: {
-      padding: '48px 32px',
-      backgroundColor: '#f0f2f5',
-      minHeight: '100vh',
-      fontFamily: '"TT Norms", sans-serif',
-      display: 'flex',
-      justifyContent: 'center',
-      // Added position: relative to act as a container for the shapes
-      position: 'relative',
-    },
-    contentWrapper: {
-      width: '100%',
-      maxWidth: '1200px',
-      // Added position and zIndex to place content above the shapes
-      position: 'relative',
-      zIndex: 1,
-    },
-    header: {
-      display: 'flex',
-      // Changed to flex-end to align bottoms of title and button
-      alignItems: 'flex-end',
-      justifyContent: 'space-between',
-      marginBottom: '16px', // Adjusted margin
-      gap: '24px',
-    },
-    // titleGroup is no longer needed
-    titleMain: {
-      fontSize: '60px',
-      fontWeight: '900',
-      lineHeight: 1.1,
-      color: '#031c59',
-      wordBreak: 'break-word',
-    },
-    createdDateText: {
-      fontSize: '20px',
-      color: '#475569',
-      marginTop: '8px', // Adjusted margin
-      marginBottom: '24px', // Added margin for spacing
-    },
-  };
   
   const allButtonStyles = `
     .download-button {
@@ -224,13 +238,12 @@ const DashboardPage = () => {
   `;
 
   return (
-    <div style={styles.container}>
-      {/* Moved BackgroundShapes to be a sibling of the content */}
+    // *** FIX: The ref is now on the top-level container to capture everything ***
+    <div style={styles.container} ref={dashboardRef}>
       <BackgroundShapes />
       <div style={styles.contentWrapper}>
-        <div ref={dashboardRef}>
+        <div> {/* This div no longer needs a ref */}
           <style>{allButtonStyles}</style>
-          {/* Header layout simplified for proper alignment */}
           <div style={styles.header}>
             <span style={styles.titleMain}>
                 {dashboardData?.customerName || 'Customer Report'}
@@ -250,7 +263,6 @@ const DashboardPage = () => {
                 </button>
             </div>
           </div>
-          {/* Date is now separate from the header for cleaner layout */}
           {dashboardData?.createdDate && (
               <p style={styles.createdDateText}>
               Created on: {dashboardData.createdDate}
