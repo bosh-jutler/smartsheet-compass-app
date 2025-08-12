@@ -45,7 +45,7 @@ REQUIRED_COLS_ASSESSMENTS = [
     "Industry", "Submitter", "Maturity Score"
 ]
 REQUIRED_COLS_DASHBOARD = [
-    "Assessment ID", "Customer Name", "Created Date", "Executive Summary"
+    "Assessment ID", "Customer Name", "Created Date", "Executive Summary", "Maturity Score"
 ]
 
 # --- Security and Serializers ---
@@ -187,7 +187,7 @@ async def get_assessments(request: Request) -> List[Dict[str, Any]]:
     except requests.exceptions.HTTPError as e:
         # Forward client-side errors, handle server-side errors
         if 400 <= e.response.status_code < 500:
-             raise HTTPException(e.response.status_code, "Authentication error with Smartsheet.")
+                raise HTTPException(e.response.status_code, "Authentication error with Smartsheet.")
         raise HTTPException(500, "Failed to communicate with Smartsheet.")
     except Exception as e:
         print(f"Error fetching assessments: {e}")
@@ -217,12 +217,23 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
                 
                 row_assessment_id = str(int(float(row_assessment_id_val)))
                 if row_assessment_id == assessment_id_str:
+                    
+                    maturity_score_val = _get_cell_value(row, column_map["Maturity Score"])
+                    maturity_score = None
+                    try:
+                        # Ensure the score is a valid number before sending
+                        if maturity_score_val is not None:
+                            maturity_score = float(maturity_score_val)
+                    except (ValueError, TypeError):
+                        maturity_score = None # Send null if score isn't a number
+
                     dashboard_data = {
                         "customerName": _get_cell_value(row, column_map["Customer Name"]) or "N/A",
                         "createdDate": format_display_date(
                             _get_cell_value(row, column_map["Created Date"])
                         ),
                         "executiveSummary": _get_cell_value(row, column_map["Executive Summary"]) or "No summary available.",
+                        "maturityScore": maturity_score,
                     }
                     return JSONResponse(content=dashboard_data)
             except (ValueError, TypeError):
@@ -232,7 +243,7 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
         raise HTTPException(404, f"Assessment with ID '{assessment_id_str}' not found.")
     except requests.exceptions.HTTPError as e:
         if 400 <= e.response.status_code < 500:
-             raise HTTPException(e.response.status_code, "Authentication error with Smartsheet.")
+                raise HTTPException(e.response.status_code, "Authentication error with Smartsheet.")
         raise HTTPException(500, "Failed to communicate with Smartsheet.")
     except Exception as e:
         print(f"Error in get_dashboard_data for {assessment_id_str}: {e}")
