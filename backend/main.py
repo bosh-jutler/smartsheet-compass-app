@@ -45,7 +45,8 @@ REQUIRED_COLS_ASSESSMENTS = [
     "Industry", "Submitter", "Maturity Score"
 ]
 REQUIRED_COLS_DASHBOARD = [
-    "Assessment ID", "Customer Name", "Created Date", "Executive Summary", "Maturity Score"
+    "Assessment ID", "Customer Name", "Created Date", "Executive Summary", "Maturity Score",
+    "Strengths Formatted", "Key Findings Formatted"
 ]
 
 # --- Security and Serializers ---
@@ -234,6 +235,8 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
                         ),
                         "executiveSummary": _get_cell_value(row, column_map["Executive Summary"]) or "No summary available.",
                         "maturityScore": maturity_score,
+                        "strengthsFormatted": _get_cell_value(row, column_map["Strengths Formatted"]) or "No strengths data available.",
+                        "keyFindingsFormatted": _get_cell_value(row, column_map["Key Findings Formatted"]) or "No key findings data available.",
                     }
                     return JSONResponse(content=dashboard_data)
             except (ValueError, TypeError):
