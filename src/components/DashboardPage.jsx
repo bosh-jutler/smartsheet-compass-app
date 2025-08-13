@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
+// Assuming a LoadingComponent exists in './LoadingComponent'
+// If not, you can replace it with: const LoadingComponent = () => <div>Loading...</div>;
 import LoadingComponent from './LoadingComponent';
 
 
@@ -64,46 +67,10 @@ const BackgroundShapes = () => {
   );
 };
 
-const ExecutiveSummaryCard = ({ summary }) => {
-  const styles = {
-    card: {
-      backgroundColor: '#ffffff',
-      padding: '32px 40px',
-      borderRadius: '20px',
-      boxShadow: '0 8px 30px rgba(0, 0, 0, 0.1)',
-      border: '1px solid #e0e0e0',
-    },
-    title: {
-      fontSize: '22px', fontWeight: '600', color: '#031c59',
-      marginBottom: '16px', borderBottom: '2px solid #e0e0e0', paddingBottom: '12px',
-    },
-    text: { fontSize: '16px', color: '#334155', lineHeight: '1.7', whiteSpace: 'pre-wrap' },
-  };
-  return (
-    <div style={styles.card}>
-      <h3 style={styles.title}>Executive Summary</h3>
-      <p style={styles.text}>{summary}</p>
-    </div>
-  );
-};
-
-/**
- * A highly maintainable gauge chart component with a separate legend below.
- */
 const MaturityScoreVisual = ({ score }) => {
-  // --- Single Source of Truth for Configuration ---
   const gaugeConfig = {
-    width: 440,
-    height: 220,
-    radius: 180,
-    strokeWidth: 50,
-    colors: {
-      initial: '#a87efb',
-      defined: '#7847dc',
-      optimized: '#26026e',
-      indicator: '#031c59',
-      label: '#64748b',
-    },
+    width: 440, height: 220, radius: 180, strokeWidth: 50,
+    colors: { initial: '#a87efb', defined: '#7847dc', optimized: '#26026e', indicator: '#031c59', label: '#64748b' },
     legend: [
         { name: 'Initial', range: '0-50', color: '#a87efb' },
         { name: 'Defined', range: '50-75', color: '#7847dc' },
@@ -111,9 +78,8 @@ const MaturityScoreVisual = ({ score }) => {
     ],
     labels: {
       numeric: [
-        { text: '0', value: 0 }, { text: '25', value: 25 },
-        { text: '50', value: 50 }, { text: '75', value: 75 },
-        { text: '100', value: 100 },
+        { text: '0', value: 0 }, { text: '25', value: 25 }, { text: '50', value: 50 },
+        { text: '75', value: 75 }, { text: '100', value: 100 },
       ],
     }
   };
@@ -122,18 +88,13 @@ const MaturityScoreVisual = ({ score }) => {
   const cx = width / 2;
   const cy = height;
   const arcCircumference = Math.PI * radius;
-
   const isValidScore = typeof score === 'number' && score >= 0 && score <= 100;
   const finalScore = isValidScore ? score : 0;
   const roundedScore = Math.round(finalScore);
 
-  // --- Calculations ---
   const polarToCartesian = (centerX, centerY, r, angleInDegrees) => {
     const angleInRadians = ((angleInDegrees - 180) * Math.PI) / 180.0;
-    return {
-      x: centerX + r * Math.cos(angleInRadians),
-      y: centerY + r * Math.sin(angleInRadians),
-    };
+    return { x: centerX + r * Math.cos(angleInRadians), y: centerY + r * Math.sin(angleInRadians) };
   };
   const getLabelPos = (scoreValue, r) => {
     const angle = (scoreValue / 100) * 180;
@@ -143,10 +104,9 @@ const MaturityScoreVisual = ({ score }) => {
   
   const fullArcPath = `M ${cx - radius},${cy} A ${radius},${radius} 0 0 1 ${cx + radius},${cy}`;
 
-  // --- Dynamic Styles based on Config ---
   const styles = {
-    container: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px', margin: '80px auto 60px auto' },
-    legend: { display: 'flex', justifyContent: 'center', gap: '24px' },
+    container: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', margin: '0 auto' },
+    legend: { display: 'flex', justifyContent: 'center', gap: '20px' },
     legendItem: { display: 'flex', alignItems: 'center', gap: '8px' },
     legendColorBox: { width: '14px', height: '14px', borderRadius: '3px' },
     legendText: { fontSize: '14px', color: '#334155', fontWeight: '500' },
@@ -155,17 +115,9 @@ const MaturityScoreVisual = ({ score }) => {
     arc: { fill: 'none', strokeWidth: strokeWidth },
     centerContent: { position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '100%' },
     scoreText: { color: colors.indicator, fontSize: '72px', fontWeight: '900', lineHeight: '1' },
-    scoreLabel: { color: '#6b7394', fontSize: '18px', fontWeight: '900', marginTop: '8px' },
+    scoreLabel: { color: '#475569', fontSize: '18px', fontWeight: '600', marginTop: '8px' },
     axisLabel: { position: 'absolute', color: colors.label, fontSize: '14px', fontWeight: '500' },
-    valueIndicator: {
-      position: 'absolute',
-      width: 0,
-      height: 0,
-      borderLeft: '10px solid transparent',
-      borderRight: '10px solid transparent',
-      borderBottom: `15px solid ${colors.indicator}`,
-      transition: 'transform 0.7s ease, top 0.7s ease, left 0.7s ease',
-    },
+    valueIndicator: { position: 'absolute', width: 0, height: 0, borderLeft: '10px solid transparent', borderRight: '10px solid transparent', borderBottom: `15px solid ${colors.indicator}`, transition: 'transform 0.7s ease, top 0.7s ease, left 0.7s ease' },
   };
   
   const numericLabelRadius = radius + strokeWidth / 2 + 12;
@@ -173,7 +125,6 @@ const MaturityScoreVisual = ({ score }) => {
   const indicatorRotation = (finalScore / 100) * 180 - 90;
   const indicatorPosition = getLabelPos(finalScore, indicatorRadius);
   const indicatorTransform = `${indicatorPosition.transform} rotate(${indicatorRotation}deg)`;
-
 
   return (
     <div style={styles.container}>
@@ -183,25 +134,13 @@ const MaturityScoreVisual = ({ score }) => {
             <path d={fullArcPath} style={{ ...styles.arc, stroke: colors.defined, strokeDasharray: `${arcCircumference * 0.25} ${arcCircumference}`, strokeDashoffset: -(arcCircumference * 0.5) }} />
             <path d={fullArcPath} style={{ ...styles.arc, stroke: colors.initial, strokeDasharray: `${arcCircumference * 0.5} ${arcCircumference}` }} />
         </svg>
-        
-        {gaugeConfig.labels.numeric.map(label => (
-            <div key={label.text} style={{ ...styles.axisLabel, ...getLabelPos(label.value, numericLabelRadius) }}>{label.text}</div>
-        ))}
-        
-        {isValidScore && (
-            <div style={{
-            ...styles.valueIndicator,
-            ...indicatorPosition,
-            transform: indicatorTransform,
-            }} />
-        )}
-        
+        {gaugeConfig.labels.numeric.map(label => (<div key={label.text} style={{ ...styles.axisLabel, ...getLabelPos(label.value, numericLabelRadius) }}>{label.text}</div>))}
+        {isValidScore && (<div style={{ ...styles.valueIndicator, ...indicatorPosition, transform: indicatorTransform }} />)}
         <div style={styles.centerContent}>
             <div style={styles.scoreText}>{isValidScore ? roundedScore : '--'}</div>
             <div style={styles.scoreLabel}>Maturity Score</div>
         </div>
       </div>
-      
       <div style={styles.legend}>
         {gaugeConfig.legend.map(item => (
             <div key={item.name} style={styles.legendItem}>
@@ -212,6 +151,57 @@ const MaturityScoreVisual = ({ score }) => {
       </div>
     </div>
   );
+};
+
+const SummaryAndGaugeCard = ({ summary, score }) => {
+    const styles = {
+        card: {
+            display: 'flex',
+            backgroundColor: '#ffffff',
+            padding: '40px',
+            borderRadius: '20px',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #e0e0e0',
+            gap: '40px',
+            marginTop: '24px',
+            alignItems: 'center',
+        },
+        summarySection: {
+            flex: '1.5',
+            paddingRight: '40px',
+            // borderRight has been removed from here
+        },
+        summaryTitle: {
+            fontSize: '22px',
+            fontWeight: '600',
+            color: '#031c59',
+            marginBottom: '16px',
+        },
+        summaryText: {
+            fontSize: '16px',
+            color: '#334155',
+            lineHeight: '1.7',
+            whiteSpace: 'pre-wrap'
+        },
+        gaugeSection: {
+            flex: '1',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+    };
+
+    return (
+        <div style={styles.card}>
+            <div style={styles.summarySection}>
+                <h3 style={styles.summaryTitle}>Executive Summary</h3>
+                <p style={styles.summaryText}>{summary || 'No summary available.'}</p>
+            </div>
+            <div style={styles.gaugeSection}>
+                <MaturityScoreVisual score={score} />
+            </div>
+        </div>
+    );
 };
 
 
@@ -227,7 +217,6 @@ const DashboardPage = () => {
   const [pdfError, setPdfError] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-
   const dashboardRef = useRef(null);
   const buttonContainerRef = useRef(null);
 
@@ -256,7 +245,6 @@ const DashboardPage = () => {
     setIsDownloading(true);
     setPdfError(null);
     if (buttonContainerRef.current) buttonContainerRef.current.style.visibility = 'hidden';
-
     try {
       await generatePdf(dashboardRef, dashboardData);
     } catch (err) {
@@ -268,7 +256,6 @@ const DashboardPage = () => {
     }
   };
 
-  // --- CSS-in-JS for Button ---
   const styles = {
     container: { padding: '48px 32px', backgroundColor: '#f0f2f5', minHeight: '100vh', fontFamily: '"TT Norms", sans-serif', display: 'flex', justifyContent: 'center', position: 'relative' },
     contentWrapper: { width: '100%', maxWidth: '1200px', position: 'relative', zIndex: 1 },
@@ -301,14 +288,7 @@ const DashboardPage = () => {
           <div style={styles.header}>
             <span style={styles.titleMain}>{dashboardData?.customerName || 'Customer Report'}</span>
             <div ref={buttonContainerRef}>
-              <button
-                style={buttonStyle}
-                onClick={handleDownloadClick}
-                disabled={buttonDisabled}
-                onMouseEnter={() => setIsButtonHovered(true)}
-                onMouseLeave={() => setIsButtonHovered(false)}
-                title={pdfError || 'Generate a PDF of this report'}
-              >
+              <button style={buttonStyle} onClick={handleDownloadClick} disabled={buttonDisabled} onMouseEnter={() => setIsButtonHovered(true)} onMouseLeave={() => setIsButtonHovered(false)} title={pdfError || 'Generate a PDF of this report'}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.905 3.079V2.75z" />
                   <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
@@ -318,8 +298,12 @@ const DashboardPage = () => {
             </div>
           </div>
           {dashboardData?.createdDate && <p style={styles.createdDateText}>Created on: {dashboardData.createdDate}</p>}
-          {dashboardData?.executiveSummary ? <ExecutiveSummaryCard summary={dashboardData.executiveSummary} /> : <p>No Executive Summary found.</p>}
-          {dashboardData?.maturityScore !== null && typeof dashboardData?.maturityScore !== 'undefined' && <MaturityScoreVisual score={dashboardData.maturityScore} />}
+          
+          <SummaryAndGaugeCard
+            summary={dashboardData?.executiveSummary}
+            score={dashboardData?.maturityScore}
+          />
+          
         </div>
       </div>
     </div>
