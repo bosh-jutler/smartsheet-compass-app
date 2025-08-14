@@ -6,6 +6,7 @@ import html2canvas from 'html2canvas';
 // Assuming a LoadingComponent exists in './LoadingComponent'
 // If not, you can replace it with: const LoadingComponent = () => <div>Loading...</div>;
 import LoadingComponent from './LoadingComponent';
+import RadarChartWidget from './RadarChartWidget';
 
 
 // ====================================================================
@@ -345,6 +346,9 @@ const DashboardPage = () => {
     title="Strengths & Key Findings"
     content={dashboardData?.strengthsAndKeyFindings}
   />
+</div>
+<div style={{ marginTop: '24px' }}>
+  <RadarChartWidget data={dashboardData?.radarChartData} />
 </div>
           
         </div>
