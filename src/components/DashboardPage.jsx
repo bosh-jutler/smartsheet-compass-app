@@ -6,7 +6,7 @@ import html2canvas from 'html2canvas';
 // Assuming a LoadingComponent exists in './LoadingComponent'
 // If not, you can replace it with: const LoadingComponent = () => <div>Loading...</div>;
 import LoadingComponent from './LoadingComponent';
-import RadarChartWidget from './RadarChartWidget';
+import StrengthsAndRadarCard from './StrengthsAndRadarCard';
 
 
 // ====================================================================
@@ -209,37 +209,6 @@ const SummaryAndGaugeCard = ({ summary, score }) => {
 // Child Components
 // ====================================================================
 
-const InfoCard = ({ title, content }) => {
-  const styles = {
-    card: {
-      backgroundColor: '#ffffff',
-      padding: '32px',
-      borderRadius: '20px',
-      boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
-      border: '1px solid #e0e0e0',
-      height: '100%',
-    },
-    title: {
-      fontSize: '22px',
-      fontWeight: '600',
-      color: '#031c59',
-      marginBottom: '16px',
-    },
-content: {
-     fontSize: '16px',
-color: '#334155',
-lineHeight: '1.7',
-whiteSpace: 'pre-wrap',
-   },
- };
-
- return (
-   <div style={styles.card}>
-     <h3 style={styles.title}>{title}</h3>
-     <div style={styles.content}>{content || 'No data available.'}</div>
-   </div>
- );
-};
 
 
 // ====================================================================
@@ -342,13 +311,10 @@ const DashboardPage = () => {
           />
 
 <div style={{ marginTop: '24px' }}>
-  <InfoCard
-    title="Strengths & Key Findings"
-    content={dashboardData?.strengthsAndKeyFindings}
+  <StrengthsAndRadarCard
+    strengths={dashboardData?.strengthsAndKeyFindings}
+    radarChartData={dashboardData?.radarChartData}
   />
-</div>
-<div style={{ marginTop: '24px' }}>
-  <RadarChartWidget data={dashboardData?.radarChartData} />
 </div>
           
         </div>
