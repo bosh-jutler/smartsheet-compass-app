@@ -7,6 +7,7 @@ import html2canvas from 'html2canvas';
 // If not, you can replace it with: const LoadingComponent = () => <div>Loading...</div>;
 import LoadingComponent from './LoadingComponent';
 import StrengthsAndRadarCard from './StrengthsAndRadarCard';
+import PpmMaturityCard from './PpmMaturityCard';
 
 
 // ====================================================================
@@ -315,6 +316,10 @@ const DashboardPage = () => {
     strengths={dashboardData?.strengthsAndKeyFindings}
     radarChartData={dashboardData?.radarChartData}
   />
+</div>
+
+<div style={{ marginTop: '24px' }}>
+  <PpmMaturityCard maturityScore={dashboardData?.maturityScore} />
 </div>
           
         </div>

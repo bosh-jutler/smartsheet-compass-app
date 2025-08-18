@@ -1,0 +1,138 @@
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* --- Header & Badge --- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #1a1a1a;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+}
+
+.badge.initial { background-color: #f44336; /* Red */}
+.badge.defined { background-color: #673ab7; /* Purple */}
+.badge.optimized { background-color: #4caf50; /* Green */}
+
+.card p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* --- Main Layout --- */
+.mainContent {
+  display: flex;
+  gap: 64px;
+}
+
+.tabsAndContent {
+  flex: 2;
+  
+  /* --- ⭐️ ADDED: Prevents the container from expanding based on its content --- */
+  min-width: 0;
+}
+
+/* --- Tabs --- */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.tabButton {
+  padding: 10px 20px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: -2px;
+}
+
+.tabButton:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.tabButton.active {
+  color: #673ab7;
+  border-bottom-color: #673ab7;
+  font-weight: 600;
+}
+
+/* --- Tab Content --- */
+.tabContent {
+  padding: 20px 4px;
+}
+
+.tabContent ul {
+  list-style-position: outside;
+  padding-left: 20px;
+  margin: 0;
+  color: #333;
+  line-height: 1.7;
+  column-count: 2;
+  column-gap: 32px;
+}
+
+.tabContent li {
+  break-inside: avoid;
+  padding-bottom: 4px;
+  overflow-wrap: break-word;
+}
+
+
+/* --- Pyramid --- */
+.pyramidContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+}
+
+.pyramid {
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1 / 0.9;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.pyramidSection {
+  width: 100%;
+  background-color: #e0e0e0;
+  transition: background-color 0.3s ease;
+}
+
+.level3 { height: 25%; }
+.level2 { height: 35%; }
+.level1 { height: 40%; }
+
+.pyramidSection.active {
+  background-color: #673ab7;
+}
