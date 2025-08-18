@@ -2,6 +2,7 @@ import React from 'react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip, Text } from 'recharts';
 
 const RadarChartComponent = ({ data }) => {
+  // This section is now corrected to pull dynamic data for the 'B' key
   const chartData = [
     { subject: 'Demand & Intake Management', A: data.diAverage, B: data.diScore, fullMark: 100 },
     { subject: 'Work Sourcing & Planning', A: data.wspAverage, B: data.wspScore, fullMark: 100 },
@@ -43,13 +44,22 @@ const RadarChartComponent = ({ data }) => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <RadarChart cx="50%" cy="40%" outerRadius="70%" data={chartData} margin={{ top: 20, right: 30, bottom: 0, left: 30 }}>
+      <RadarChart cx="45%" cy="40%" outerRadius="65%" data={chartData} margin={{ top: 20, right: 30, bottom: 0, left: 30 }}>
         <PolarGrid />
         <PolarAngleAxis dataKey="subject" tick={renderPolarAngleAxisTick} />
         <PolarRadiusAxis />
-        <Radar name="Industry Average" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-        <Radar name="Your Company" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
-        <Legend formatter={renderLegendText} />
+        <Radar name="Industry Average" dataKey="A" stroke="#4c5470" fill="#4c5470" fillOpacity={0.6} />
+        <Radar name="Your Company" dataKey="B" stroke="#2d60d7" fill="#2d60d7" fillOpacity={0.6} />
+        <Legend 
+          verticalAlign="bottom" 
+          wrapperStyle={{ 
+            bottom: 20, 
+            position: 'absolute', 
+            left: '45%', 
+            transform: 'translateX(-50%)' 
+          }} 
+          formatter={renderLegendText} 
+        />
         <Tooltip />
       </RadarChart>
     </ResponsiveContainer>
@@ -66,12 +76,12 @@ const StrengthsAndRadarCard = ({ strengths, radarChartData }) => {
       border: '1px solid #e0e0e0',
       display: 'flex',
       gap: '40px',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       height: '100%',
     },
     chartSection: {
-      flex: '1.5',
-      height: '400px',
+      flex: '1.2',
+      height: '350px',
       position: 'relative',
     },
     strengthsSection: {
