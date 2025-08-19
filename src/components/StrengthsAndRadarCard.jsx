@@ -35,12 +35,29 @@ const RadarChartComponent = ({ data }) => {
   };
 
   /**
-   * Custom formatter for the legend text to make it bold.
+   * ⭐️ Custom Legend Component ⭐️
+   * This component renders the legend items using Flexbox,
+   * allowing for a 'gap' to create space between them while maintaining centering.
    */
-  const renderLegendText = (value, entry) => {
-    const { color } = entry;
-    return <span style={{ color, fontWeight: 700 }}>{value}</span>;
+  const CustomLegend = (props) => {
+    const { payload } = props; // 'payload' is provided by Recharts with legend data
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
+        {
+          payload.map((entry, index) => (
+            <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', color: entry.color, fontWeight: 700 }}>
+              {/* This SVG creates the colored square icon for the legend item */}
+              <svg width="14" height="14" viewBox="0 0 32 32" style={{ marginRight: '8px' }}>
+                <path stroke="none" fill={entry.color} d="M0,4h32v24h-32z" />
+              </svg>
+              <span>{entry.value}</span>
+            </div>
+          ))
+        }
+      </div>
+    );
   };
+
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -50,15 +67,17 @@ const RadarChartComponent = ({ data }) => {
         <PolarRadiusAxis />
         <Radar name="Industry Average" dataKey="A" stroke="#4c5470" fill="#4c5470" fillOpacity={0.6} />
         <Radar name="Your Company" dataKey="B" stroke="#2d60d7" fill="#2d60d7" fillOpacity={0.6} />
-        <Legend 
-          verticalAlign="bottom" 
-          wrapperStyle={{ 
-            bottom: 20, 
-            position: 'absolute', 
-            left: '45%', 
-            transform: 'translateX(-50%)' 
-          }} 
-          formatter={renderLegendText} 
+        <Legend
+          verticalAlign="bottom"
+          wrapperStyle={{
+            bottom: 20,
+            position: 'absolute',
+            width: '100%',
+            left: '45%',
+            transform: 'translateX(-50%)'
+          }}
+          // We now use the 'content' prop to render our custom legend
+          content={<CustomLegend />}
         />
         <Tooltip />
       </RadarChart>
@@ -78,7 +97,6 @@ const StrengthsAndRadarCard = ({ strengths, radarChartData }) => {
       gap: '40px',
       alignItems: 'flex-start',
       height: '100%',
-      // --- ⭐️ ADDED: Font family for consistency ---
       fontFamily: '"TT Norms Pro", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
     },
     chartSection: {
