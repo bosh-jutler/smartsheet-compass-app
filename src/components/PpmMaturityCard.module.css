@@ -92,40 +92,20 @@
   overflow-wrap: break-word;
 }
 
-
 /* --- Pyramid --- */
 .pyramidContainer {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  min-width: 180px;
+  min-width: 347px;
+  margin-top: -25px;
 }
 
+/* Style for the SVG element itself */
 .pyramid {
   width: 100%;
-  max-width: 200px;
-  aspect-ratio: 1 / 0.9;
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-  display: flex;
-  flex-direction: column;
-}
-
-.pyramidSection {
-  width: 100%;
-  background-color: #e0e0e0;
-  transition: background-color 0.3s ease;
-}
-
-.level3 { height: 25%; }
-.level2 { height: 35%; }
-.level1 { height: 40%; }
-
-.pyramidSection.active {
-  background-color: var(--brand-teal-500);
-}/* src/components/PpmMaturityCard.module.css */
-
-.card {
+  max-width: 385px;.card {
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -223,15 +203,42 @@
 .pyramidContainer {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  min-width: 180px;
+  min-width: 347px;
+  margin-top: -50px;
 }
 
-/* Style for the SVG element itself */
 .pyramid {
   width: 100%;
-  max-width: 200px;
+  max-width: 385px;
+  aspect-ratio: 100 / 90;
+}
+
+.pyramidSection {
+  fill: #e0e0e0;
+  transition: fill 0.3s ease;
+}
+
+.pyramidSection.active {
+  fill: var(--brand-teal-500);
+}
+
+.pyramidLabel {
+  font-size: 3px;
+  font-weight: 900;
+  fill: #ffffff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+  font-family: "TT Norms Pro", "Montserrat", sans-serif;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.pyramidSection.active ~ .pyramidLabel {
+  opacity: 1;
+}
   aspect-ratio: 100 / 90; /* Matches the SVG viewBox ratio */
 }
 

@@ -1,9 +1,6 @@
-// src/components/PpmMaturityCard.jsx
-
 import React, { useState } from 'react';
 import styles from './PpmMaturityCard.module.css';
 
-// maturityData remains the same...
 const maturityData = [
   {
     key: 'Initial',
@@ -51,7 +48,6 @@ const maturityData = [
   },
 ];
 
-
 const PpmMaturityCard = ({ maturityScore }) => {
   const getMaturityLevel = (score) => {
     if (score <= 50) return 'Initial';
@@ -96,32 +92,46 @@ const PpmMaturityCard = ({ maturityScore }) => {
           </div>
         </div>
 
-        {/* --- ⭐️ MODIFIED SECTION: Replaced divs with SVG --- */}
         <div className={styles.pyramidContainer}>
           <svg
             className={styles.pyramid}
-            viewBox="0 0 100 90" // Defines the coordinate system for the pyramid
+            viewBox="0 0 100 90"
             preserveAspectRatio="xMidYMid meet"
           >
-            {/* Optimized Section (Top) */}
-            <polygon
-              className={`${styles.pyramidSection} ${activeTab === 'Optimized' ? styles.active : ''}`}
-              points="50,0 62.5,22.5 37.5,22.5"
-            />
-            {/* Defined Section (Middle) */}
-            <polygon
-              className={`${styles.pyramidSection} ${activeTab === 'Defined' ? styles.active : ''}`}
-              points="37.5,22.5 62.5,22.5 80,54 20,54"
-            />
-            {/* Initial Section (Bottom) */}
-            <polygon
-              className={`${styles.pyramidSection} ${activeTab === 'Initial' ? styles.active : ''}`}
-              points="20,54 80,54 100,90 0,90"
-            />
+            {/* Optimized Section (Top) - 15% */}
+            <g>
+              <polygon
+                className={`${styles.pyramidSection} ${activeTab === 'Optimized' ? styles.active : ''}`}
+                points="50,0 57.5,13.5 42.5,13.5"
+              />
+              <text x="50" y="9" className={styles.pyramidLabel}>
+                15%
+              </text>
+            </g>
+            
+            {/* Defined Section (Middle) - 60% */}
+            <g>
+              <polygon
+                className={`${styles.pyramidSection} ${activeTab === 'Defined' ? styles.active : ''}`}
+                points="42.5,13.5 57.5,13.5 87.5,67.5 12.5,67.5"
+              />
+              <text x="50" y="40.5" className={styles.pyramidLabel}>
+                60%
+              </text>
+            </g>
+            
+            {/* Initial Section (Bottom) - 25% */}
+            <g>
+              <polygon
+                className={`${styles.pyramidSection} ${activeTab === 'Initial' ? styles.active : ''}`}
+                points="12.5,67.5 87.5,67.5 100,90 0,90"
+              />
+              <text x="50" y="78.75" className={styles.pyramidLabel}>
+                25%
+              </text>
+            </g>
           </svg>
         </div>
-        {/* --- End of modified section --- */}
-
       </div>
     </div>
   );
