@@ -10,7 +10,6 @@ const getScoreDetails = (score) => {
   return { label: 'Initial' };
 };
 
-// REVERTED: Colors are back to the standard red, amber, and green
 const MATURITY_COLORS = {
   Optimized: '#10b981', // Emerald 500
   Defined: '#f59e0b',   // Amber 500
@@ -19,7 +18,6 @@ const MATURITY_COLORS = {
 };
 
 const RADIAN = Math.PI / 180;
-// REVERTED: Label text fill is back to "white"
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
   if (percent < 0.05) {
     return null;
@@ -50,7 +48,7 @@ const CustomLegend = ({ data }) => {
   }
   return (
     <div style={{ paddingTop: '16px' }}>
-      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
         {data.map((entry) => (
           <li key={`item-${entry.name}`} style={{ display: 'flex', alignItems: 'center' }}>
             <span style={{
@@ -61,7 +59,13 @@ const CustomLegend = ({ data }) => {
               backgroundColor: MATURITY_COLORS[entry.name],
               marginRight: '8px'
             }}/>
-            <span style={{ color: '#475569', fontWeight: 600, fontSize: '16px' }}>
+            {/* FIXED: Added whiteSpace: 'nowrap' to prevent the text from breaking */}
+            <span style={{
+                color: '#475569',
+                fontWeight: 600,
+                fontSize: '16px',
+                whiteSpace: 'nowrap'
+            }}>
               {`${entry.name} (${entry.value})`}
             </span>
           </li>
@@ -237,8 +241,8 @@ const MaturityChartWidget = () => {
               data={maturityData}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={100}
+              innerRadius={50}
+              outerRadius={80}
               fill="#8884d8"
               dataKey="value"
               nameKey="name"
