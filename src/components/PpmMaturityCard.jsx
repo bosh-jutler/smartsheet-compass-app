@@ -1,6 +1,9 @@
+// src/components/PpmMaturityCard.jsx
+
 import React, { useState } from 'react';
 import styles from './PpmMaturityCard.module.css';
 
+// maturityData remains the same...
 const maturityData = [
   {
     key: 'Initial',
@@ -48,6 +51,7 @@ const maturityData = [
   },
 ];
 
+
 const PpmMaturityCard = ({ maturityScore }) => {
   const getMaturityLevel = (score) => {
     if (score <= 50) return 'Initial';
@@ -92,26 +96,32 @@ const PpmMaturityCard = ({ maturityScore }) => {
           </div>
         </div>
 
+        {/* --- ⭐️ MODIFIED SECTION: Replaced divs with SVG --- */}
         <div className={styles.pyramidContainer}>
-          <div className={styles.pyramid}>
-             {/* --- ⭐️ CHANGED: Highlighting is now based on activeTab --- */}
-            <div
-              className={`${styles.pyramidSection} ${styles.level3} ${
-                activeTab === 'Optimized' ? styles.active : ''
-              }`}
-            ></div>
-            <div
-              className={`${styles.pyramidSection} ${styles.level2} ${
-                activeTab === 'Defined' ? styles.active : ''
-              }`}
-            ></div>
-            <div
-              className={`${styles.pyramidSection} ${styles.level1} ${
-                activeTab === 'Initial' ? styles.active : ''
-              }`}
-            ></div>
-          </div>
+          <svg
+            className={styles.pyramid}
+            viewBox="0 0 100 90" // Defines the coordinate system for the pyramid
+            preserveAspectRatio="xMidYMid meet"
+          >
+            {/* Optimized Section (Top) */}
+            <polygon
+              className={`${styles.pyramidSection} ${activeTab === 'Optimized' ? styles.active : ''}`}
+              points="50,0 62.5,22.5 37.5,22.5"
+            />
+            {/* Defined Section (Middle) */}
+            <polygon
+              className={`${styles.pyramidSection} ${activeTab === 'Defined' ? styles.active : ''}`}
+              points="37.5,22.5 62.5,22.5 80,54 20,54"
+            />
+            {/* Initial Section (Bottom) */}
+            <polygon
+              className={`${styles.pyramidSection} ${activeTab === 'Initial' ? styles.active : ''}`}
+              points="20,54 80,54 100,90 0,90"
+            />
+          </svg>
         </div>
+        {/* --- End of modified section --- */}
+
       </div>
     </div>
   );
