@@ -70,7 +70,7 @@ const StrengthsAndRadarCard = ({ strengths, radarChartData }) => {
   const styles = {
     card: {
       backgroundColor: '#ffffff',
-      padding: '32px',
+      padding: '40px',
       borderRadius: '20px',
       boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
       border: '1px solid #e0e0e0',

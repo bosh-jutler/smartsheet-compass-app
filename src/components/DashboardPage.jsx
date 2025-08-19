@@ -51,9 +51,18 @@ const BackgroundShapes = () => (
     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, overflow: 'hidden' }}>
         <svg width="100%" height="100%" viewBox="0 0 1440 1024" preserveAspectRatio="xMidYMid slice">
             <g fillRule="evenodd" fillOpacity="0.4">
-                <g fill="#05705a"><path d="M-50 250 A 200 200 0 0 1 -50 650 Z" /></g>
-                <g fill="#ebad1c"><path d="M1580 480 L1200 550 L1250 850 L1560 780 Z" /></g>
-                <g fill="#ebad1c"><path d="M1600 880 L1300 1124 L1550 1150 L1650 1000 Z" /></g>
+                {/* ACTION: Increased translation from 120 to 270. 
+                  This pulls the full width of the arc into the visible area.
+                */}
+                <g transform="translate(270, 0)" fill="#05705a">
+                    <path d="M-50 250 A 200 200 0 0 1 -50 650 Z" />
+                </g>
+                
+                {/* This group remains the same and should be working correctly. */}
+                <g transform="translate(-200, 0)" fill="#ebad1c">
+                    <path d="M1580 480 L1200 550 L1250 850 L1560 780 Z" />
+                    <path d="M1600 880 L1300 1124 L1550 1150 L1650 1000 Z" />
+                </g>
             </g>
         </svg>
     </div>
