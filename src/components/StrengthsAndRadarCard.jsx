@@ -78,6 +78,8 @@ const StrengthsAndRadarCard = ({ strengths, radarChartData }) => {
       gap: '40px',
       alignItems: 'flex-start',
       height: '100%',
+      // --- ⭐️ ADDED: Font family for consistency ---
+      fontFamily: '"TT Norms Pro", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
     },
     chartSection: {
       flex: '1.2',
