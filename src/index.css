@@ -39,6 +39,8 @@
   /* A brighter blue for accents, links, and interactive elements. */
   --brand-blue-500: #2d60d7;
 
+  --brand-teal-500: #05705a;
+
   /* Standard white, used for text on dark backgrounds and card surfaces. */
   --brand-white: #ffffff;
 

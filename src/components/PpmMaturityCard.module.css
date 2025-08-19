@@ -3,7 +3,9 @@
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 32px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: "TT Norms Pro", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 }
 
 /* --- Header & Badge --- */
@@ -11,33 +13,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 16px;
   margin-bottom: 16px;
 }
 
 .header h2 {
   margin: 0;
   font-size: 22px;
-  color: #1a1a1a;
-}
-
-.badge {
-  padding: 6px 12px;
-  border-radius: 16px;
+  color: var(--brand-blue-800);
   font-weight: 600;
-  font-size: 14px;
-  color: #fff;
 }
-
-.badge.initial { background-color: #f44336; /* Red */}
-.badge.defined { background-color: #673ab7; /* Purple */}
-.badge.optimized { background-color: #4caf50; /* Green */}
 
 .card p {
-  color: #555;
-  line-height: 1.6;
+  color: #334155;
+  line-height: 1.7;
   margin-bottom: 24px;
+  padding-bottom: 18px;
 }
 
 /* --- Main Layout --- */
@@ -48,12 +38,9 @@
 
 .tabsAndContent {
   flex: 2;
-  
-  /* --- ⭐️ ADDED: Prevents the container from expanding based on its content --- */
   min-width: 0;
 }
 
-/* --- Tabs --- */
 .tabs {
   display: flex;
   border-bottom: 2px solid #e0e0e0;
@@ -66,7 +53,7 @@
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
-  color: #666;
+  color: #334155;
   border-bottom: 3px solid transparent;
   transition: all 0.2s ease-in-out;
   margin-bottom: -2px;
@@ -78,8 +65,8 @@
 }
 
 .tabButton.active {
-  color: #673ab7;
-  border-bottom-color: #673ab7;
+  color: var(--brand-teal-500);
+  border-bottom-color: var(--brand-teal-500);
   font-weight: 600;
 }
 
@@ -92,7 +79,7 @@
   list-style-position: outside;
   padding-left: 20px;
   margin: 0;
-  color: #333;
+  color: #334155;
   line-height: 1.7;
   column-count: 2;
   column-gap: 32px;
@@ -134,5 +121,5 @@
 .level1 { height: 40%; }
 
 .pyramidSection.active {
-  background-color: #673ab7;
+  background-color: var(--brand-teal-500);
 }

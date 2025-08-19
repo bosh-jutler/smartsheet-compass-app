@@ -63,9 +63,6 @@ const PpmMaturityCard = ({ maturityScore }) => {
     <div className={styles.card}>
       <div className={styles.header}>
         <h2>Understanding PPM Maturity</h2>
-        <span className={`${styles.badge} ${styles[currentLevelKey.toLowerCase()]}`}>
-          Your Level: {currentLevelKey} (Score: {maturityScore}/100)
-        </span>
       </div>
       <p>
         PPM (Project Portfolio Management) maturity refers to the level of sophistication, effectiveness, and
