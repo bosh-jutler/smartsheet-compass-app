@@ -115,7 +115,8 @@ const PpmMaturityCard = ({ maturityScore }) => {
                 className={`${styles.pyramidSection} ${activeTab === 'Defined' ? styles.active : ''}`}
                 points="42.5,13.5 57.5,13.5 87.5,67.5 12.5,67.5"
               />
-              <text x="50" y="40.5" className={styles.pyramidLabel}>
+              {/* MODIFIED: y-coordinate updated from 40.5 to the geometric center */}
+              <text x="50" y="46.5" className={`${styles.pyramidLabel} ${styles.pyramidLabelLarge}`}>
                 60%
               </text>
             </g>
@@ -126,7 +127,8 @@ const PpmMaturityCard = ({ maturityScore }) => {
                 className={`${styles.pyramidSection} ${activeTab === 'Initial' ? styles.active : ''}`}
                 points="12.5,67.5 87.5,67.5 100,90 0,90"
               />
-              <text x="50" y="78.75" className={styles.pyramidLabel}>
+              {/* MODIFIED: y-coordinate updated from 78.75 to the geometric center */}
+              <text x="50" y="79.29" className={`${styles.pyramidLabel} ${styles.pyramidLabelLarge}`}>
                 25%
               </text>
             </g>

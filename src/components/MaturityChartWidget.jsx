@@ -63,7 +63,7 @@ const CustomLegend = ({ data }) => {
             <span style={{
                 color: '#475569',
                 fontWeight: 600,
-                fontSize: '16px',
+                fontSize: '12px',
                 whiteSpace: 'nowrap'
             }}>
               {`${entry.name} (${entry.value})`}

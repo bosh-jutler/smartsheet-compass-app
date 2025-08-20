@@ -27,113 +27,6 @@
   color: #334155;
   line-height: 1.7;
   margin-bottom: 24px;
-  padding-bottom: 15px;
-}
-
-/* --- Main Layout --- */
-.mainContent {
-  display: flex;
-  gap: 64px;
-}
-
-.tabsAndContent {
-  flex: 2;
-  min-width: 0;
-}
-
-.tabs {
-  display: flex;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.tabButton {
-  padding: 10px 20px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  color: #334155;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s ease-in-out;
-  margin-bottom: -2px;
-}
-
-.tabButton:hover {
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-.tabButton.active {
-  color: var(--brand-teal-500);
-  border-bottom-color: var(--brand-teal-500);
-  font-weight: 600;
-}
-
-/* --- Tab Content --- */
-.tabContent {
-  padding: 20px 4px;
-}
-
-.tabContent ul {
-  list-style-position: outside;
-  padding-left: 20px;
-  margin: 0;
-  color: #334155;
-  line-height: 1.7;
-  column-count: 2;
-  column-gap: 32px;
-  min-height: 205px;
-}
-
-.tabContent li {
-  break-inside: avoid;
-  padding-bottom: 4px;
-  overflow-wrap: break-word;
-}
-
-/* --- Pyramid --- */
-.pyramidContainer {
-  flex: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  min-width: 347px;
-  margin-top: -25px;
-}
-
-/* Style for the SVG element itself */
-.pyramid {
-  width: 100%;
-  max-width: 385px;.card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 40px;
-  font-family: "TT Norms Pro", "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-}
-
-/* --- Header & Badge --- */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.header h2 {
-  margin: 0;
-  font-size: 22px;
-  color: var(--brand-blue-800);
-  font-weight: 600;
-}
-
-.card p {
-  color: #334155;
-  line-height: 1.7;
-  margin-bottom: 24px;
   padding-bottom: 18px;
 }
 
@@ -224,8 +117,9 @@
   fill: var(--brand-teal-500);
 }
 
+/* Base styles for all pyramid labels */
 .pyramidLabel {
-  font-size: 3px;
+  font-size: 3px; /* Default size for 'Optimized' */
   font-weight: 900;
   fill: #ffffff;
   text-anchor: middle;
@@ -236,18 +130,12 @@
   transition: opacity 0.3s ease-in-out;
 }
 
-.pyramidSection.active ~ .pyramidLabel {
+/* New class to override the font size */
+.pyramidLabelLarge {
+  font-size: 10px; /* Larger size for 'Initial' and 'Defined' */
+}
+
+/* Show the label only when its section is active */
+.pyramidSection.active + .pyramidLabel {
   opacity: 1;
-}
-  aspect-ratio: 100 / 90; /* Matches the SVG viewBox ratio */
-}
-
-/* Style for each polygon section within the SVG */
-.pyramidSection {
-  fill: #e0e0e0; /* Use 'fill' for SVG shapes, not 'background-color' */
-  transition: fill 0.3s ease; /* Transition the 'fill' property */
-}
-
-.pyramidSection.active {
-  fill: var(--brand-teal-500); /* Use 'fill' to set the active color */
 }
