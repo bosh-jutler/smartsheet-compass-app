@@ -46,7 +46,7 @@ REQUIRED_COLS_ASSESSMENTS = [
 ]
 REQUIRED_COLS_DASHBOARD = [
     "Assessment ID", "Customer Name", "Created Date", "Executive Summary", "Maturity Score",
-    "Strengths & Key Findings Formatted", "D&I Summary",
+    "Strengths & Key Findings Formatted", "D&I Summary", "D&I Dimensional Performance",
     "D&I Average Score", "WS&P Average Score", "WE Average Score", "W&PR Average Score", "PP Average Score", "SP Average Score",
     "D&I Score", "WS&P Score", "WE Score", "W&PR Score", "PP Score", "SP Score"
 ]
@@ -239,6 +239,7 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
                         "maturityScore": maturity_score,
                         "strengthsAndKeyFindings": _get_cell_value(row, column_map["Strengths & Key Findings Formatted"]) or "No data available.",
                         "diSummary": _get_cell_value(row, column_map["D&I Summary"]) or "No summary available.",
+                        "diDimensionalPerformance": _get_cell_value(row, column_map["D&I Dimensional Performance"]) or "No dimensional performance data available.",
                         "radarChartData": {
                             "diAverage": _get_cell_value(row, column_map["D&I Average Score"]),
                             "wspAverage": _get_cell_value(row, column_map["WS&P Average Score"]),

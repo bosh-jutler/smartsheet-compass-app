@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './DemandAndIntakeCard.module.css';
 
-const DemandAndIntakeCard = ({ summary }) => {
+const DemandAndIntakeCard = ({ summary, dimensionalPerformance }) => {
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -10,6 +10,10 @@ const DemandAndIntakeCard = ({ summary }) => {
       <div className={styles.content}>
         <h3>Summary</h3>
         <p>{summary || 'No summary available.'}</p>
+
+        {/* --- New Section Added --- */}
+        <h3>Dimensional Performance</h3>
+        <p>{dimensionalPerformance || 'No dimensional performance data available.'}</p>
       </div>
     </div>
   );
