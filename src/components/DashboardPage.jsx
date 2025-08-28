@@ -264,7 +264,7 @@ const DashboardPage = () => {
                 		const errorData = await response.json().catch(() => ({ error: `Server responded with status ${response.status}` }));
                 		throw new Error(errorData.error);
               	}
-              	setDashboardData(await response.json());
+setDashboardData(await response.json());
           	} catch (err) {
               	setError(err.message);
           	} finally {
@@ -356,7 +356,10 @@ const DashboardPage = () => {
                     	radarChartData={dashboardData?.radarChartData}
                 	/>
 <PpmMaturityCard maturityScore={dashboardData?.maturityScore} />
-<DemandAndIntakeCard summary={dashboardData?.diSummary} />
+<DemandAndIntakeCard
+summary={dashboardData?.diSummary}
+diDimensionalPerformance={dashboardData?.diDimensionalPerformance}
+/>
             	</div>
         	</div>
     	</div>
