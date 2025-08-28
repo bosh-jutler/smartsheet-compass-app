@@ -7,6 +7,7 @@ import html2canvas from 'html2canvas';
 import LoadingComponent from './LoadingComponent'; // Assuming this exists
 import StrengthsAndRadarCard from './StrengthsAndRadarCard';
 import PpmMaturityCard from './PpmMaturityCard';
+import DemandAndIntakeCard from './DemandAndIntakeCard';
 
 // ====================================================================
 // Reusable Utility Functions
@@ -354,7 +355,8 @@ const DashboardPage = () => {
                     	strengths={dashboardData?.strengthsAndKeyFindings}
                     	radarChartData={dashboardData?.radarChartData}
                 	/>
-                	<PpmMaturityCard maturityScore={dashboardData?.maturityScore} />
+<PpmMaturityCard maturityScore={dashboardData?.maturityScore} />
+<DemandAndIntakeCard summary={dashboardData?.diSummary} />
             	</div>
         	</div>
     	</div>
