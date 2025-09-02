@@ -1,7 +1,13 @@
 import React from 'react';
 import styles from './DemandAndIntakeCard.module.css';
+import ColumnChart from './ColumnChart';
 
-const DemandAndIntakeCard = ({ summary, diDimensionalPerformance }) => {
+const DemandAndIntakeCard = ({ summary, diDimensionalPerformance, yourCompanyScore, industryAverageScore }) => {
+  const chartData = [
+    { label: 'Your Company', value: yourCompanyScore, color: '#05705a' },
+    { label: 'Industry Average', value: industryAverageScore, color: '#ebad1c' }
+  ];
+
   return (
     <div className={styles.card}>
       <div className={styles.header}>
@@ -14,6 +20,9 @@ const DemandAndIntakeCard = ({ summary, diDimensionalPerformance }) => {
 
         <h3 className={styles.dimensionalHeader}>Dimensional Performance</h3>
         <p>{diDimensionalPerformance || 'No dimensional performance data available.'}</p>
+        <div className={styles.chartContainer}>
+          <ColumnChart data={chartData} showValueLabels={true} />
+        </div>
       </div>
     </div>
   );

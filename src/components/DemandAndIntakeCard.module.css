@@ -33,3 +33,6 @@
   white-space: pre-wrap;
   margin-top: 0;
 }
+.chartContainer {
+  margin-top: 20px;
+}

@@ -363,6 +363,8 @@ const DashboardPage = () => {
                     <DemandAndIntakeCard
                         summary={dashboardData?.diSummary}
                         diDimensionalPerformance={dashboardData?.diDimensionalPerformance}
+                        yourCompanyScore={dashboardData?.radarChartData?.diScore}
+                        industryAverageScore={dashboardData?.radarChartData?.diAverage}
                     />
                 </div>
             </div>
