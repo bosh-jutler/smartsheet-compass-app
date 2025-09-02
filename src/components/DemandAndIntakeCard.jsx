@@ -11,8 +11,8 @@ const DemandAndIntakeCard = ({ summary, diDimensionalPerformance }) => {
         <h3>Summary</h3>
         <p>{summary || 'No summary available.'}</p>
 
-        {/* --- New Section Added --- */}
-        <h3>Dimensional Performance</h3>
+
+        <h3 className={styles.dimensionalHeader}>Dimensional Performance</h3>
         <p>{diDimensionalPerformance || 'No dimensional performance data available.'}</p>
       </div>
     </div>

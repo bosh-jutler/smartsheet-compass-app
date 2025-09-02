@@ -22,6 +22,10 @@
   margin-bottom: 8px;
 }
 
+.content h3.dimensionalHeader {
+  margin-top: 16px;
+}
+
 .content p {
   font-size: 16px;
   color: #334155;
