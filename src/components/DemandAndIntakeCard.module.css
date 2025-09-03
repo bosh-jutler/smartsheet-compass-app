@@ -22,10 +22,6 @@
   margin-bottom: 8px;
 }
 
-.content h3.dimensionalHeader {
-  margin-top: 16px;
-}
-
 .content p {
   font-size: 16px;
   color: #334155;
@@ -33,6 +29,17 @@
   white-space: pre-wrap;
   margin-top: 0;
 }
+
+.performanceSection {
+  display: flex; 
+  align-items: center; 
+  gap: 20px;
+}
+
+.performanceText {
+  flex: 1; 
+}
+
 .chartContainer {
-  margin-top: 20px;
+  margin-top: 36px;
 }

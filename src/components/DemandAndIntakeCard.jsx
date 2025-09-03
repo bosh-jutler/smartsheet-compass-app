@@ -4,8 +4,8 @@ import ColumnChart from './ColumnChart';
 
 const DemandAndIntakeCard = ({ summary, diDimensionalPerformance, yourCompanyScore, industryAverageScore }) => {
   const chartData = [
-    { label: 'Your Company', value: yourCompanyScore, color: '#05705a' },
-    { label: 'Industry Average', value: industryAverageScore, color: '#ebad1c' }
+    { label: 'Your Company', value: yourCompanyScore },
+    { label: 'Industry Average', value: industryAverageScore }
   ];
 
   return (
@@ -17,12 +17,20 @@ const DemandAndIntakeCard = ({ summary, diDimensionalPerformance, yourCompanySco
         <h3>Summary</h3>
         <p>{summary || 'No summary available.'}</p>
 
+        {/* --- START: New wrapper for side-by-side layout --- */}
+        <div className={styles.performanceSection}>
+          {/* Column for the text content */}
+          <div className={styles.performanceText}>
+            <h3 className={styles.dimensionalHeader}>Dimensional Performance</h3>
+            <p>{diDimensionalPerformance || 'No dimensional performance data available.'}</p>
+          </div>
 
-        <h3 className={styles.dimensionalHeader}>Dimensional Performance</h3>
-        <p>{diDimensionalPerformance || 'No dimensional performance data available.'}</p>
-        <div className={styles.chartContainer}>
-          <ColumnChart data={chartData} showValueLabels={true} />
+          {/* Column for the chart */}
+          <div className={styles.chartContainer}>
+            <ColumnChart data={chartData} showValueLabels={true} />
+          </div>
         </div>
+        {/* --- END: New wrapper --- */}
       </div>
     </div>
   );
