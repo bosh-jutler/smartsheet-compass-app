@@ -8,7 +8,7 @@ const ColumnChart = ({ data, showValueLabels = false }) => {
   const chartHeight = 200;
   const chartWidth = 300;
   const barWidth = 50;
-  const barMargin = 30;
+  const barMargin = 50; // Increased bar margin
   const labelHeight = 20;
 
   return (
