@@ -21,10 +21,10 @@ const ColumnChart = ({ data, showValueLabels = false }) => {
   // Color Logic
   const getBarColor = (d) => {
     if (d.label === 'Your Company') {
-      return '#6692fa';
+      return '#EBAD1C';
     }
     if (d.label === 'Industry Average') {
-      return '#184bc3';
+      return '#C79010';
     }
     return d.color || '#7847dc';
   };
