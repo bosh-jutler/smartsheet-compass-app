@@ -7,7 +7,7 @@
   width: 80px;
   text-align: right;
   margin-right: 10px;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
   color: #666;
   display: flex;
@@ -39,11 +39,12 @@
 .xLabels {
   display: flex;
   justify-content: space-around;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
   color: #666;
   display: flex;
   flex: 1;
+  margin-top: 6px;
 }
 
 .xLabel {
