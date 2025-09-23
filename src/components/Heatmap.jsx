@@ -55,7 +55,10 @@ const Heatmap = ({ data }) => {
                 <div
                   key={x}
                   className={styles.cell}
-                  style={{ backgroundColor: getColor(value) }}
+                  style={{
+                    backgroundColor: getColor(value),
+                    color: value === 0 ? '#666' : 'white'
+                  }}
                   title={`Count: ${value}`}
                 >
                   {value}
