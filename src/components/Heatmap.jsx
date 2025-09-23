@@ -11,14 +11,26 @@ const Heatmap = ({ data }) => {
     dataMap.set(`${item.y}-${item.x}`, item.value);
   });
 
-  const getColor = (value) => {
-    const counts = Array.from(dataMap.values());
-    const sortedCounts = [...new Set(counts)].sort((a, b) => a - b);
-    const rank = sortedCounts.indexOf(value);
-    
-    if (rank < 3) return '#dbe6ff';
-    if (rank < 6) return '#9ebbff';
-    return '#6692fa';
+  const colorPalette = [
+    '#c7d8ff', '#b8cdff', '#9ebbff', '#80a6ff', '#6692fa',
+    '#5081f2', '#3a6fe9', '#2d60d7', '#184bc3'
+  ];
+
+  const values = Array.from(dataMap.values());
+  const minVal = Math.min(...values, 0);
+  const maxVal = Math.max(...values, 0);
+
+  const getColor = (currentVal) => {
+    if (minVal === maxVal) {
+      return colorPalette[4]; // Middle hue
+    }
+    if (currentVal === 0) {
+        return '#FFFFFF'; // Return white for zero values
+    }
+
+    const normalized = (currentVal - minVal) / (maxVal - minVal);
+    const index = Math.round(normalized * (colorPalette.length - 1));
+    return colorPalette[index];
   };
 
   return (
