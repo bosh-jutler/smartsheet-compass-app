@@ -1,0 +1,57 @@
+.heatmapContainer {
+  display: flex;
+  font-family: sans-serif;
+  align-items: center;
+}
+
+.yLabels {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+}
+
+.yLabel {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: bold;
+}
+
+.xLabels {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+}
+
+.xLabel {
+  width: 50px;
+  text-align: center;
+}

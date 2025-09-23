@@ -1,8 +1,9 @@
 import React from 'react';
 import styles from './DemandAndIntakeCard.module.css';
 import ColumnChart from './ColumnChart';
+import Heatmap from './Heatmap';
 
-const DemandAndIntakeCard = ({ summary, diDimensionalPerformance, yourCompanyScore, industryAverageScore }) => {
+const DemandAndIntakeCard = ({ summary, diDimensionalPerformance, yourCompanyScore, industryAverageScore, heatmapData }) => {
   const chartData = [
     { label: 'Your Company', value: yourCompanyScore },
     { label: 'Industry Average', value: industryAverageScore }
@@ -31,6 +32,10 @@ const DemandAndIntakeCard = ({ summary, diDimensionalPerformance, yourCompanySco
           </div>
         </div>
         {/* --- END: New wrapper --- */}
+
+        <div className={styles.heatmapSection}>
+          <Heatmap data={heatmapData} />
+        </div>
       </div>
     </div>
   );

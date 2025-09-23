@@ -44,3 +44,8 @@
 .chartContainer {
   margin-top: 36px;
 }
+.heatmapSection {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}

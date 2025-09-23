@@ -48,7 +48,8 @@ REQUIRED_COLS_DASHBOARD = [
     "Assessment ID", "Customer Name", "Created Date", "Executive Summary", "Maturity Score",
     "Strengths & Key Findings Formatted", "D&I Summary", "D&I Dimensional Performance",
     "D&I Average Score", "WS&P Average Score", "WE Average Score", "W&PR Average Score", "PP Average Score", "SP Average Score",
-    "D&I Score", "WS&P Score", "WE Score", "W&PR Score", "PP Score", "SP Score"
+    "D&I Score", "WS&P Score", "WE Score", "W&PR Score", "PP Score", "SP Score",
+    "D&I - People Score"
 ]
 
 # --- Security and Serializers ---
@@ -212,6 +213,9 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
         if not all(col in column_map for col in REQUIRED_COLS_DASHBOARD):
             raise HTTPException(500, "Data sheet missing required columns for dashboard.")
 
+        assessment_data_for_heatmap = []
+        dashboard_data = None
+
         for row in sheet_data.get("rows", []):
             try:
                 row_assessment_id_val = _get_cell_value(row, column_map["Assessment ID"])
@@ -219,16 +223,27 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
                     continue
                 
                 row_assessment_id = str(int(float(row_assessment_id_val)))
-                if row_assessment_id == assessment_id_str:
-                    
-                    maturity_score_val = _get_cell_value(row, column_map["Maturity Score"])
+                
+                # Collect data for the heatmap
+                maturity_score_val = _get_cell_value(row, column_map["Maturity Score"])
+                di_people_score_val = _get_cell_value(row, column_map["D&I - People Score"])
+
+                if maturity_score_val is not None and di_people_score_val is not None:
+                    try:
+                        assessment_data_for_heatmap.append({
+                            "Maturity Score": float(maturity_score_val),
+                            "D&I - People Score": int(di_people_score_val)
+                        })
+                    except (ValueError, TypeError):
+                        pass # Ignore rows where scores are not valid numbers
+
+                if row_assessment_id == assessment_id_str and dashboard_data is None:
                     maturity_score = None
                     try:
-                        # Ensure the score is a valid number before sending
                         if maturity_score_val is not None:
                             maturity_score = float(maturity_score_val)
                     except (ValueError, TypeError):
-                        maturity_score = None # Send null if score isn't a number
+                        maturity_score = None
 
                     dashboard_data = {
                         "customerName": _get_cell_value(row, column_map["Customer Name"]) or "N/A",
@@ -255,9 +270,12 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
                             "spScore": _get_cell_value(row, column_map["SP Score"]),
                         }
                     }
-                    return JSONResponse(content=dashboard_data)
             except (ValueError, TypeError):
-                continue  # Skip rows with malformed ID
+                continue
+
+        if dashboard_data:
+            dashboard_data["assessmentData"] = assessment_data_for_heatmap
+            return JSONResponse(content=dashboard_data)
         
         # If loop finishes without finding the assessment
         raise HTTPException(404, f"Assessment with ID '{assessment_id_str}' not found.")

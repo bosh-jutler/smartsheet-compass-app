@@ -245,6 +245,7 @@ const DashboardPage = () => {
     // The rest of the component is unchanged.
     const { sheetId } = useParams();
     const [dashboardData, setDashboardData] = useState(null);
+    const [heatmapData, setHeatmapData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [pdfError, setPdfError] = useState(null);
@@ -278,6 +279,41 @@ const DashboardPage = () => {
 
         fetchDashboardData();
     }, [sheetId]);
+
+    useEffect(() => {
+        if (dashboardData?.assessmentData) {
+            const processedData = processHeatmapData(dashboardData.assessmentData);
+            setHeatmapData(processedData);
+        }
+    }, [dashboardData]);
+
+    const processHeatmapData = (assessmentData) => {
+        const counts = {};
+
+        assessmentData.forEach(item => {
+            const maturityScore = item['Maturity Score'];
+            const peopleScore = item['D&I - People Score'];
+
+            if (maturityScore !== undefined && peopleScore !== undefined) {
+                let yCategory;
+                if (maturityScore <= 50) {
+                    yCategory = 'Initial';
+                } else if (maturityScore <= 75) {
+                    yCategory = 'Defined';
+                } else {
+                    yCategory = 'Optimized';
+                }
+
+                const key = `${yCategory}-${peopleScore}`;
+                counts[key] = (counts[key] || 0) + 1;
+            }
+        });
+
+        return Object.entries(counts).map(([key, value]) => {
+            const [y, x] = key.split('-');
+            return { y, x, value };
+        });
+    };
 
     const handleDownloadClick = async () => {
         setIsDownloading(true);
@@ -365,6 +401,7 @@ const DashboardPage = () => {
                         diDimensionalPerformance={dashboardData?.diDimensionalPerformance}
                         yourCompanyScore={dashboardData?.radarChartData?.diScore}
                         industryAverageScore={dashboardData?.radarChartData?.diAverage}
+                        heatmapData={heatmapData}
                     />
                 </div>
             </div>
