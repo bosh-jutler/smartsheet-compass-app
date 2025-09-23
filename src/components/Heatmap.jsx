@@ -36,37 +36,44 @@ const Heatmap = ({ data }) => {
   return (
     <div className={styles.heatmapContainer}>
       <div className={styles.grid}>
-        <div className={styles.row}>
-            <div className={styles.yLabel} />
-            <div className={styles.xTitle}>Subcategory Score</div>
-        </div>
-        <div className={styles.row}>
+        <div className={styles.xLabelsContainer}>
           <div className={styles.yLabel} />
-          <div className={styles.xLabels}>
-            {xLabels.map(label => <div key={label} className={styles.xLabel}>{label}</div>)}
+          <div className={styles.xLabelsContent}>
+            <div className={styles.xTitle}>Subcategory Score</div>
+            <div className={styles.xLabels}>
+              {xLabels.map(label => <div key={label} className={styles.xLabel}>{label}</div>)}
+            </div>
           </div>
         </div>
-        {yLabels.map(y => (
-          <div key={y} className={styles.row}>
-            <div className={styles.yLabel}>{y}</div>
-            {xLabels.map(x => {
-              const value = dataMap.get(`${y}-${x}`) || 0;
-              return (
-                <div
-                  key={x}
-                  className={styles.cell}
-                  style={{
-                    backgroundColor: getColor(value),
-                    color: value === 0 ? '#666' : 'white'
-                  }}
-                  title={`Count: ${value}`}
-                >
-                  {value}
-                </div>
-              );
-            })}
+        <div className={styles.dataRow}>
+          <div className={styles.yLabelsContainer}>
+            {yLabels.map(y => (
+              <div key={y} className={styles.yLabel}>{y}</div>
+            ))}
           </div>
-        ))}
+          <div className={styles.cellGrid}>
+            {yLabels.map(y => (
+              <div key={y} className={styles.cellRow}>
+                {xLabels.map(x => {
+                  const value = dataMap.get(`${y}-${x}`) || 0;
+                  return (
+                    <div
+                      key={x}
+                      className={styles.cell}
+                      style={{
+                        backgroundColor: getColor(value),
+                        color: value === 0 ? '#666' : 'white'
+                      }}
+                      title={`Count: ${value}`}
+                    >
+                      {value}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

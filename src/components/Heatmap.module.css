@@ -13,6 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  height: 50px;
 }
 
 .grid {
@@ -20,9 +21,32 @@
   flex-direction: column;
 }
 
-.row {
+.cellGrid {
+  border: 1px solid #d3d3d3;
+}
+
+.xLabelsContainer {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+}
+
+.xLabelsContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dataRow {
+  display: flex;
+}
+
+.yLabelsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.cellRow {
+  display: flex;
 }
 
 .cell {
