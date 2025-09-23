@@ -78,7 +78,7 @@ const Heatmap = ({ data, highlightMaturityScore, highlightDiPeopleScore }) => {
                   };
 
                   if (isHighlighted) {
-                    cellStyle.border = '3px solid #031C59';
+                    cellStyle.border = '4px solid #031C59';
                   }
 
                   return (
