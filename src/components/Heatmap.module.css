@@ -58,6 +58,7 @@
   color: white;
   font-weight: bold;
   font-size: 18px;
+  box-sizing: border-box; /* Ensures border is inside the element */
 }
 
 .xLabels {

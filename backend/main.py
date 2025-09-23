@@ -239,11 +239,15 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
 
                 if row_assessment_id == assessment_id_str and dashboard_data is None:
                     maturity_score = None
+                    di_people_score = None
                     try:
                         if maturity_score_val is not None:
                             maturity_score = float(maturity_score_val)
+                        if di_people_score_val is not None:
+                            di_people_score = int(di_people_score_val)
                     except (ValueError, TypeError):
                         maturity_score = None
+                        di_people_score = None
 
                     dashboard_data = {
                         "customerName": _get_cell_value(row, column_map["Customer Name"]) or "N/A",
@@ -252,6 +256,8 @@ async def get_dashboard_data(assessment_id_str: str, request: Request) -> JSONRe
                         ),
                         "executiveSummary": _get_cell_value(row, column_map["Executive Summary"]) or "No summary available.",
                         "maturityScore": maturity_score,
+                        "highlightMaturityScore": maturity_score,
+                        "highlightDiPeopleScore": di_people_score,
                         "strengthsAndKeyFindings": _get_cell_value(row, column_map["Strengths & Key Findings Formatted"]) or "No data available.",
                         "diSummary": _get_cell_value(row, column_map["D&I Summary"]) or "No summary available.",
                         "diDimensionalPerformance": _get_cell_value(row, column_map["D&I Dimensional Performance"]) or "No dimensional performance data available.",

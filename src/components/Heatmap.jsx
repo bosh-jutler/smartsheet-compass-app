@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Heatmap.module.css';
 
-const Heatmap = ({ data }) => {
+const Heatmap = ({ data, highlightMaturityScore, highlightDiPeopleScore }) => {
   const xLabels = ['1', '2', '3'];
   const yLabels = ['Optimized', 'Defined', 'Initial'];
 
@@ -10,6 +10,18 @@ const Heatmap = ({ data }) => {
   data.forEach(item => {
     dataMap.set(`${item.y}-${item.x}`, item.value);
   });
+
+  // Converts a numeric maturity score to its corresponding label
+  const getMaturityLabel = (score) => {
+    if (score === null || score === undefined) return null;
+    if (score > 75) return 'Optimized';
+    if (score >= 51 && score <= 75) return 'Defined';
+    if (score < 51) return 'Initial';
+    return null;
+  };
+
+  const highlightY = getMaturityLabel(highlightMaturityScore);
+  const highlightX = highlightDiPeopleScore;
 
   const colorPalette = [
     '#c7d8ff', '#b8cdff', '#9ebbff', '#80a6ff', '#6692fa',
@@ -25,7 +37,7 @@ const Heatmap = ({ data }) => {
       return colorPalette[4]; // Middle hue
     }
     if (currentVal === 0) {
-        return '#FFFFFF'; // Return white for zero values
+      return '#FFFFFF'; // Return white for zero values
     }
 
     const normalized = (currentVal - minVal) / (maxVal - minVal);
@@ -56,14 +68,24 @@ const Heatmap = ({ data }) => {
               <div key={y} className={styles.cellRow}>
                 {xLabels.map(x => {
                   const value = dataMap.get(`${y}-${x}`) || 0;
+                  
+                  // Highlighting logic
+                  const isHighlighted = y === highlightY && x === String(highlightX);
+
+                  const cellStyle = {
+                    backgroundColor: getColor(value),
+                    color: value === 0 ? '#666' : 'white',
+                  };
+
+                  if (isHighlighted) {
+                    cellStyle.border = '3px solid #031C59';
+                  }
+
                   return (
                     <div
                       key={x}
                       className={styles.cell}
-                      style={{
-                        backgroundColor: getColor(value),
-                        color: value === 0 ? '#666' : 'white'
-                      }}
+                      style={cellStyle}
                       title={`Count: ${value}`}
                     >
                       {value}

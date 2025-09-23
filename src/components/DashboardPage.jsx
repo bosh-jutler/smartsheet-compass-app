@@ -402,6 +402,8 @@ const DashboardPage = () => {
                         yourCompanyScore={dashboardData?.radarChartData?.diScore}
                         industryAverageScore={dashboardData?.radarChartData?.diAverage}
                         heatmapData={heatmapData}
+                        highlightMaturityScore={dashboardData?.highlightMaturityScore}
+                        highlightDiPeopleScore={dashboardData?.highlightDiPeopleScore}
                     />
                 </div>
             </div>
