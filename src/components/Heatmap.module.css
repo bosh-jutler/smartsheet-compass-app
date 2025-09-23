@@ -1,21 +1,15 @@
 .heatmapContainer {
   display: flex;
   font-family: inherit;
-  align-items: center;
 }
 
-.yLabels {
-  display: flex;
-  flex-direction: column;
+.yLabel {
+  width: 80px;
   text-align: right;
   margin-right: 10px;
   font-size: 12px;
   font-weight: bold;
   color: #666;
-}
-
-.yLabel {
-  height: 50px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -28,6 +22,7 @@
 
 .row {
   display: flex;
+  align-items: center;
 }
 
 .cell {
@@ -44,13 +39,18 @@
 .xLabels {
   display: flex;
   justify-content: space-around;
-  margin-top: 5px;
   font-size: 12px;
   font-weight: bold;
   color: #666;
+  display: flex;
+  flex: 1;
 }
 
 .xLabel {
   width: 50px;
   text-align: center;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

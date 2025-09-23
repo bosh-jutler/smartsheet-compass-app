@@ -35,12 +35,10 @@ const Heatmap = ({ data }) => {
 
   return (
     <div className={styles.heatmapContainer}>
-      <div className={styles.yLabels}>
-        {yLabels.map(label => <div key={label} className={styles.yLabel}>{label}</div>)}
-      </div>
       <div className={styles.grid}>
         {yLabels.map(y => (
           <div key={y} className={styles.row}>
+            <div className={styles.yLabel}>{y}</div>
             {xLabels.map(x => {
               const value = dataMap.get(`${y}-${x}`) || 0;
               return (
@@ -56,8 +54,11 @@ const Heatmap = ({ data }) => {
             })}
           </div>
         ))}
-        <div className={styles.xLabels}>
-          {xLabels.map(label => <div key={label} className={styles.xLabel}>{label}</div>)}
+        <div className={styles.row}>
+          <div className={styles.yLabel} />
+          <div className={styles.xLabels}>
+            {xLabels.map(label => <div key={label} className={styles.xLabel}>{label}</div>)}
+          </div>
         </div>
       </div>
     </div>
