@@ -44,7 +44,7 @@
   color: #666;
   display: flex;
   flex: 1;
-  margin-top: 6px;
+  margin-bottom: 6px;
 }
 
 .xLabel {
@@ -54,4 +54,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.xTitle {
+  font-size: 16px;
+  font-weight: bold;
+  color: #666;
+  text-align: center;
+  flex: 1;
+  margin-bottom: 4px;
 }
